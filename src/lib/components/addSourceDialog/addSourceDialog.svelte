@@ -1,16 +1,10 @@
 <script lang="ts">
 	import { z } from 'zod';
-	import * as Dialog from '$lib/components/ui/dialog';
-
-	import Button from '$lib/components/ui/button/button.svelte';
-	import Input from '$lib/components/ui/input/input.svelte';
-	import Label from '$lib/components/ui/label/label.svelte';
+	import { Button, Input, Modal } from 'kampsy-ui';
 
 	import { addSource, sources } from '$lib/stores/sources.svelte';
 
 	import { youtubeURLs } from '$lib/utils/youtubeURLs';
-
-	type EventHandler = () => void;
 
 	let { open = $bindable(false) }: { open: boolean } = $props();
 
@@ -50,36 +44,50 @@
 			name = '';
 		}
 	});
+
+	let active = $state(false);
 </script>
 
-<Dialog.Root bind:open>
-	<Dialog.Trigger />
-	<Dialog.Content class="bg-primary">
-		<Dialog.Header>
-			<Dialog.Title class="text-primary-foreground">Agregar Fuente</Dialog.Title>
-			<Dialog.Description class="text-primary-foreground/70">
-				Copiá la URL del video de <span class="text-primary-foreground font-semibold">Youtube</span>, y escribí el nombre que quieras asignarle.
-			</Dialog.Description>
-		</Dialog.Header>
+<div>
+	<Modal.Root bind:active={open}>
+		<Modal.Content>
+			<Modal.Body>
+				<Modal.Header>
+					<Modal.Title>Agregar Fuente</Modal.Title>
+					<Modal.Subtitle
+						>Copiá la URL del video de <span class="text-primary-foreground font-semibold"
+							>Youtube</span
+						>, y escribí el nombre que quieras asignarle.</Modal.Subtitle
+					>
+				</Modal.Header>
+				<div class="flex flex-col gap-8">
+					<div class="flex flex-col gap-3">
+						<Input
+							aria-labelledby="URL"
+							label="URL"
+							id="url"
+							type="text"
+							placeholder="https://..."
+							bind:value={url}
+						/>
 
-		<div class="flex flex-col gap-8">
-			<div class="flex flex-col gap-3">
-				<div class="flex flex-col gap-1">
-					<Label class="text-primary-foreground" for="url">URL</Label>
-					<Input id="url" type="text" placeholder="https://..." bind:value={url} />
+						<Input
+							aria-labelledby="name"
+							label="Name"
+							id="name"
+							type="text"
+							placeholder="Nombre"
+							bind:value={name}
+						/>
+					</div>
 				</div>
-
-				<div class="flex flex-col gap-1">
-					<Label class="text-primary-foreground" for="name">Nombre</Label>
-					<Input id="name" type="text" placeholder="Nombre" bind:value={name} />
-				</div>
-			</div>
-			<div class="flex items-center justify-between">
-				<Button variant="destructive" onclick={onCancel}>Cancelar</Button>
-				<Button variant="outline" onclick={onSave} disabled={!isValid({ url, name })}>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button size="tiny" type="error" onclick={onCancel}>Cancelar</Button>
+				<Button size="tiny" type="secondary" onclick={onSave} disabled={!isValid({ url, name })}>
 					Guardar
 				</Button>
-			</div>
-		</div>
-	</Dialog.Content>
-</Dialog.Root>
+			</Modal.Footer>
+		</Modal.Content>
+	</Modal.Root>
+</div>

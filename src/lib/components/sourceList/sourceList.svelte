@@ -1,14 +1,11 @@
 <script lang="ts">
 	import { Plus } from 'lucide-svelte';
 
-	import Input from '$lib/components/ui/input/input.svelte';
 	import Source from '$lib/components/source/source.svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
 	import SourceSkeleton from '$lib/components/source/sourceSkeleton.svelte';
-	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
-	import ButtonWithTooltip from '$lib/components/buttonWithTooltip/buttonWithTooltip.svelte';
-	
+
 	import { sources } from '$lib/stores/sources.svelte';
+	import { Tooltip, Button, Input } from 'kampsy-ui';
 
 	let { onAddSource }: { onAddSource: () => void } = $props();
 	let filterQuery = $state('');
@@ -21,20 +18,21 @@
 
 <div class="flex flex-col gap-2">
 	<div class="flex items-center justify-between p-2">
-		<h3 class="scroll-m-20 text-xl font-extrabold tracking-tight text-primary-foreground">
+		<h3 class="text-primary-foreground scroll-m-20 text-xl font-extrabold tracking-tight">
 			Todas las fuentes
 		</h3>
 
 		<div class="w-48">
-			<Input placeholder="Buscar fuentes" bind:value={filterQuery} />
+			<Input aria-labelledby="Buscar" placeholder="Buscar fuentes" bind:value={filterQuery} />
 		</div>
 	</div>
-	<ScrollArea class="flex items-center gap-8 p-2 py-0" orientation="horizontal">
+
+	<div class="flex items-center gap-8 p-2 py-0">
 		<div class="flex items-center gap-8 p-4 pl-0">
 			{#if !sources.loaded}
 				{#each Array(4) as _}
 					<div
-						class="relative aspect-video h-full w-full min-w-96 overflow-visible rounded-sm rounded-tl-none border border-primary-foreground"
+						class="border-primary-foreground relative aspect-video h-full w-full min-w-96 overflow-visible rounded-sm rounded-tl-none border"
 					>
 						<SourceSkeleton />
 					</div>
@@ -45,14 +43,11 @@
 					<Source {source} />
 
 					{#if isLast}
-						<ButtonWithTooltip tooltipText="Agregar Fuente">
-							<button
-								class="h-full w-full rounded-sm border border-dashed border-primary-foreground/60 p-8 transition-colors duration-100 hover:border-primary-foreground"
-								onclick={onAddSource}
-							>
-								<Plus class="h-8 w-8 text-primary-foreground" />
-							</button>
-						</ButtonWithTooltip>
+						<Tooltip position="top" text="Agregar Fuente">
+							<Button type="secondary" shape="square" size="tiny" onclick={onAddSource}>
+								<Plus class="text-primary-foreground h-8 w-8" />
+							</Button>
+						</Tooltip>
 					{/if}
 				{:else}
 					<div class="grow flex flex-col gap-4 items-center justify-center">
@@ -65,10 +60,10 @@
 								{/if}
 							</span>
 						</div>
-						<Button variant="outline" onclick={onAddSource}>Agregar Fuente</Button>
+						<Button type="secondary" onclick={onAddSource}>Agregar Fuente</Button>
 					</div>
 				{/each}
 			{/if}
 		</div>
-	</ScrollArea>
+	</div>
 </div>

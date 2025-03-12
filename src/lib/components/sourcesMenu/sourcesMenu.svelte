@@ -1,7 +1,7 @@
 <script lang="ts">
-	import * as Menubar from '$lib/components/ui/menubar';
 	import { sources, toggleDeleteMode } from '$lib/stores/sources.svelte';
 	import { Tv } from 'lucide-svelte';
+	import { Menu } from 'kampsy-ui';
 
 	type Props = {
 		onAddSource: () => void;
@@ -27,7 +27,19 @@
 	];
 </script>
 
-<Menubar.Menu>
+<div class="w-full">
+	<Menu.Root>
+		<Menu.Button>Fuentes</Menu.Button>
+		<Menu.Content class="w-[200px]">
+			<Menu.Item onClick={() => console.log('One')}>One</Menu.Item>
+			<Menu.Item onClick={() => console.log('Two')}>Two</Menu.Item>
+			<Menu.Item onClick={() => console.log('Three')}>One</Menu.Item>
+			<Menu.Item onClick={() => console.log('Delete')} type="error">Delete</Menu.Item>
+		</Menu.Content>
+	</Menu.Root>
+</div>
+
+<!-- <Menubar.Menu>
 	<Menubar.Trigger class="cursor-pointer">Fuentes</Menubar.Trigger>
 	<Menubar.Content>
 		{#each items as item, index (index)}
@@ -49,4 +61,4 @@
 			{/if}
 		{/each}
 	</Menubar.Content>
-</Menubar.Menu>
+</Menubar.Menu> -->

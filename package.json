@@ -21,6 +21,7 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
 		"globals": "^15.0.0",
+		"kampsy-ui": "^1.0.1",
 		"postcss": "^8.4.38",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
@@ -35,13 +36,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"bits-ui": "^0.21.12",
-		"clsx": "^2.1.1",
 		"lucide-svelte": "^0.414.0",
-		"mode-watcher": "^0.4.0",
-		"svelte-sonner": "^0.3.27",
-		"tailwind-merge": "^2.4.0",
-		"tailwind-variants": "^0.2.1",
+		"svelte-sonner": "^0.3.28",
 		"zod": "^3.23.8"
 	}
 }
