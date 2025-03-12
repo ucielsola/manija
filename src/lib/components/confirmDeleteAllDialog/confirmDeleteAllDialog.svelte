@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { deleteAllSources } from '$lib/stores/sources.svelte';
+	import { sourceStore } from '$lib/stores/sources.svelte';
 	import { Button, Modal } from 'kampsy-ui';
 
 	let { open = $bindable(false) }: { open: boolean } = $props();
@@ -10,7 +10,7 @@
 
 	const onAction = () => {
 		open = false;
-		deleteAllSources();
+		sourceStore.deleteAllSources();
 	};
 </script>
 

@@ -9,11 +9,7 @@
 	import IframeSkeleton from '$lib/components/source/sourceSkeleton.svelte';
 
 	import {
-		deleteSource,
-		pinSource,
-		sources,
-		toggleDeleteSuccess,
-		unpinSource
+		sourceStore
 	} from '$lib/stores/sources.svelte';
 
 	import type { Source } from '$lib/types/Source';
@@ -22,9 +18,9 @@
 
 	let loaded = $state(false);
 	let isHovering = $state(false);
-	let isPinned = $derived(sources.pinned.map((s) => s.id).includes(source.id));
+	let isPinned = $derived(sourceStore.pinnedSources.map((s) => s.id).includes(source.id));
 	let reloadCount = $state(0);
-	let showMenu = $derived(sources.isDeleting || isHovering);
+	let showMenu = $derived(sourceStore.isDeleting || isHovering);
 	let disabled = $derived(isPinned && !enableInteraction);
 
 	let hoverTimeout: number;
@@ -48,14 +44,16 @@
 	};
 
 	const onDeleteSource = () => {
-		deleteSource(source.id);
+		sourceStore.deleteSource(source.id, () => {
+			toast.success('Fuente borrada');
+		});
 	};
 
 	const onTogglePin = () => {
 		if (!isPinned) {
-			pinSource(source);
+			sourceStore.pinSource(source);
 		} else {
-			unpinSource(source);
+			sourceStore.unpinSource(source);
 		}
 	};
 
@@ -63,13 +61,6 @@
 		loaded = false;
 		reloadCount += 1;
 	};
-
-	$effect(() => {
-		if (sources.deleteSuccess) {
-			toast.success('Fuente borrada');
-			toggleDeleteSuccess();
-		}
-	});
 </script>
 
 <div>
@@ -92,7 +83,7 @@
 	>
 		{#if showMenu}
 			<div
-				class="justify-evently absolute -top-7 right-0 z-0 flex w-fit cursor-default items-center rounded-t bg-slate-900 pb-2"
+				class="justify-evently absolute -top-7 right-0 z-0 flex w-fit cursor-default items-center rounded-t bg-slate-900 dark:bg-slate-200 pb-2"
 				in:fly={{ duration: 300, delay: 0, y: 10 }}
 				out:fly={{ duration: 300, y: 20, delay: 100 }}
 			>
@@ -121,7 +112,7 @@
 				<div class="border-primary/60 mb-1 h-4 w-0 border-r border-dashed"></div>
 				
 				<div class="flex w-8 items-center justify-center pt-1 px-2">
-					<Tooltip position="top" text="Borrar fuente">
+					<Tooltip position="top" text="Borrar">
 						<Button shape="square" size="tiny" onclick={onDeleteSource}>
 							<Trash2 class="pointer-events-none h-4 w-4" />
 						</Button>

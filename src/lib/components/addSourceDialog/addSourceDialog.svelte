@@ -2,7 +2,7 @@
 	import { z } from 'zod';
 	import { Button, Input, Modal } from 'kampsy-ui';
 
-	import { addSource, sources } from '$lib/stores/sources.svelte';
+	import { sourceStore } from '$lib/stores/sources.svelte';
 
 	import { youtubeURLs } from '$lib/utils/youtubeURLs';
 
@@ -10,11 +10,15 @@
 
 	let url = $state('');
 	let name = $state('');
+	let sources = $derived(sourceStore.sources);
+	let urlAlreadyExists = $derived(
+		sources.some((source) => source.id === youtubeURLs.extractURLId(url))
+	);
+
+	const { addSource } = sourceStore;
 
 	const urlRegEx = /^(https?):\/\/(?=.*\.[a-z]{2,})[^\s$.?#].[^\s]*$/i;
 	const urlSchema = z.string().refine((value) => urlRegEx.test(value));
-
-	let urlAlreadyExists = false;
 
 	const onCancel = () => {
 		open = false;
@@ -34,18 +38,11 @@
 	};
 
 	$effect(() => {
-		const urlId = youtubeURLs.extractURLId(url);
-		urlAlreadyExists = sources.list.some((source) => source.id === urlId);
-	});
-
-	$effect(() => {
 		if (!open) {
 			url = '';
 			name = '';
 		}
 	});
-
-	let active = $state(false);
 </script>
 
 <div>
@@ -54,11 +51,11 @@
 			<Modal.Body>
 				<Modal.Header>
 					<Modal.Title>Agregar Fuente</Modal.Title>
-					<Modal.Subtitle
-						>Copiá la URL del video de <span class="text-primary-foreground font-semibold"
-							>Youtube</span
-						>, y escribí el nombre que quieras asignarle.</Modal.Subtitle
-					>
+					<Modal.Subtitle>
+						Copiá la URL del video de
+						<span class="text-primary-foreground font-semibold"> Youtube </span>
+						, y escribí el nombre que quieras asignarle.
+					</Modal.Subtitle>
 				</Modal.Header>
 				<div class="flex flex-col gap-8">
 					<div class="flex flex-col gap-3">
@@ -84,7 +81,12 @@
 			</Modal.Body>
 			<Modal.Footer>
 				<Button size="tiny" type="error" onclick={onCancel}>Cancelar</Button>
-				<Button size="tiny" type="secondary" onclick={onSave} disabled={!isValid({ url, name })}>
+				<Button
+					size="tiny"
+					type="secondary"
+					onclick={onSave}
+					disabled={!isValid({ url, name }) || !urlAlreadyExists}
+				>
 					Guardar
 				</Button>
 			</Modal.Footer>

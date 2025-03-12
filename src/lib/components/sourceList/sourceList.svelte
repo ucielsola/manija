@@ -1,22 +1,26 @@
 <script lang="ts">
+	import { Tooltip, Button, Input } from 'kampsy-ui';
+
 	import { Plus } from 'lucide-svelte';
 
 	import Source from '$lib/components/source/source.svelte';
 	import SourceSkeleton from '$lib/components/source/sourceSkeleton.svelte';
 
-	import { sources } from '$lib/stores/sources.svelte';
-	import { Tooltip, Button, Input } from 'kampsy-ui';
+	import { sourceStore } from '$lib/stores/sources.svelte';
 
 	let { onAddSource }: { onAddSource: () => void } = $props();
+	let sources = $derived(sourceStore.sources);
+	let loaded = $derived(sourceStore.isLoaded);
+
 	let filterQuery = $state('');
 	let filteredSources = $derived(
 		filterQuery.length
-			? sources.list.filter((s) => s.name.toLowerCase().includes(filterQuery.toLowerCase()))
-			: sources.list
+			? sources.filter((s) => s.name.toLowerCase().includes(filterQuery.toLowerCase()))
+			: sources
 	);
 </script>
 
-<div class="flex flex-col gap-2">
+<div class="flex flex-col gap-2 overflow-hidden">
 	<div class="flex items-center justify-between p-2">
 		<h3 class="text-primary-foreground scroll-m-20 text-xl font-extrabold tracking-tight">
 			Todas las fuentes
@@ -27,9 +31,9 @@
 		</div>
 	</div>
 
-	<div class="flex items-center gap-8 p-2 py-0">
-		<div class="flex items-center gap-8 p-4 pl-0">
-			{#if !sources.loaded}
+	<div class="flex items-center gap-8 overflow-auto p-2 py-0">
+		<div class="flex items-center gap-8 overflow-auto p-4 pl-0">
+			{#if !loaded}
 				{#each Array(4) as _}
 					<div
 						class="border-primary-foreground relative aspect-video h-full w-full min-w-96 overflow-visible rounded-sm rounded-tl-none border"
@@ -43,11 +47,12 @@
 					<Source {source} />
 
 					{#if isLast}
-						<Tooltip position="top" text="Agregar Fuente">
-							<Button type="secondary" shape="square" size="tiny" onclick={onAddSource}>
-								<Plus class="text-primary-foreground h-8 w-8" />
-							</Button>
-						</Tooltip>
+						<button
+							onclick={onAddSource}
+							class="mt-6 flex h-48 w-48 shrink-0 flex-col items-center justify-center border border-dashed"
+						>
+							<Plus class="text-primary-foreground h-24 w-24" />
+						</button>
 					{/if}
 				{:else}
 					<div class="grow flex flex-col gap-4 items-center justify-center">

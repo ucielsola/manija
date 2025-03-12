@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { sources, toggleDeleteMode } from '$lib/stores/sources.svelte';
-	import { Tv } from 'lucide-svelte';
+	import { sourceStore } from '$lib/stores/sources.svelte';
 	import { Menu } from 'kampsy-ui';
 
 	type Props = {
@@ -9,6 +8,8 @@
 	};
 
 	let { onAddSource, onDeleteAll }: Props = $props();
+
+	const { toggleDeleteMode } = sourceStore;
 
 	const items: {
 		label: string;
@@ -31,34 +32,9 @@
 	<Menu.Root>
 		<Menu.Button>Fuentes</Menu.Button>
 		<Menu.Content class="w-[200px]">
-			<Menu.Item onClick={() => console.log('One')}>One</Menu.Item>
-			<Menu.Item onClick={() => console.log('Two')}>Two</Menu.Item>
-			<Menu.Item onClick={() => console.log('Three')}>One</Menu.Item>
-			<Menu.Item onClick={() => console.log('Delete')} type="error">Delete</Menu.Item>
+			{#each items as item}
+				<Menu.Item>{item.label}</Menu.Item>
+			{/each}
 		</Menu.Content>
 	</Menu.Root>
 </div>
-
-<!-- <Menubar.Menu>
-	<Menubar.Trigger class="cursor-pointer">Fuentes</Menubar.Trigger>
-	<Menubar.Content>
-		{#each items as item, index (index)}
-			{@const isLast = index === items.length - 1}
-			<Menubar.Item
-				class="cursor-pointer"
-				href={item.href}
-				onclick={() => item.handler && item.handler()}
-				data-delete-source={item.isDataDeleteSource}
-				disabled={sources.isDeleting}
-			>
-				{item.label}
-				{#if item.shortcut}
-					<Menubar.Shortcut>{item.shortcut}</Menubar.Shortcut>
-				{/if}
-			</Menubar.Item>
-			{#if !isLast}
-				<Menubar.Separator />
-			{/if}
-		{/each}
-	</Menubar.Content>
-</Menubar.Menu> -->

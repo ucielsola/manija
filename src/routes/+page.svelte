@@ -4,16 +4,17 @@
 	import SourcesMenu from '$lib/components/sourcesMenu/sourcesMenu.svelte';
 	import SourceList from '$lib/components/sourceList/sourceList.svelte';
 	import { Tv } from 'lucide-svelte';
-	import { initSources, sources } from '$lib/stores/sources.svelte';
-	import { onMount } from 'svelte';
+	import { sourceStore } from '$lib/stores/sources.svelte';
 	import PinnedSources from '$lib/components/pinnedSources/pinnedSources.svelte';
 	import { ThemeSwitcher } from 'kampsy-ui';
+	import { onMount } from 'svelte';
+	import ColumnAmountSelector from '$lib/components/pinnedSources/columnAmountSelector.svelte';
 
 	let isOpenAddSourceDialog = $state(false);
 	let isOpenDeleteAllDialog = $state(false);
+	let isDeleting = $derived(sourceStore.isDeleting);
+
 	let windowClickTimeout: number;
-	let sourceListHeight = $state(0);
-	let containerHeight = $state(0);
 
 	const onAddSource = () => {
 		isOpenAddSourceDialog = true;
@@ -29,13 +30,13 @@
 			const isButtonDelete = !!elDataset.deleteSource;
 
 			if (!isButtonDelete) {
-				sources.isDeleting = false;
+				sourceStore.toggleDeleteMode();
 			}
 		}, 100);
 	};
 
 	$effect(() => {
-		if (sources.isDeleting) {
+		if (isDeleting) {
 			window.addEventListener('click', windowClick);
 		} else {
 			window.removeEventListener('click', windowClick);
@@ -43,7 +44,9 @@
 		}
 	});
 
-	onMount(initSources);
+	onMount(() => {
+		sourceStore.recoverState();
+	});
 </script>
 
 <AddSourceDialog bind:open={isOpenAddSourceDialog} />
@@ -57,7 +60,8 @@
 		</div>
 
 		<div class="flex items-center gap-4 p-6">
-			<div>
+			<div class="flex items-center gap-4">
+				<ColumnAmountSelector />
 				<SourcesMenu {onAddSource} {onDeleteAll} />
 			</div>
 
@@ -65,12 +69,12 @@
 		</div>
 	</div>
 
-	<div class="flex h-full flex-col pb-2 overflow-auto">
+	<div class="flex h-full flex-col overflow-auto">
 		<div class="grow">
 			<PinnedSources {onAddSource} />
 		</div>
 
-		<div class="border-t  p-6">
+		<div class="border-t p-6 pt-2 h-96">
 			<SourceList {onAddSource} />
 		</div>
 	</div>
