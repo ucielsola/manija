@@ -25,7 +25,7 @@
 
 <div class="flex flex-col h-full w-full overflow-hidden">
 	<div class="p-8 pt-0">
-		<div class="grid h-full gap-2 overflow-scroll py-8"
+		<div class="grid h-full gap-x-2 gap-y-8 overflow-scroll py-8"
 			style={`grid-template-columns: repeat(${columns}, 1fr);`}
 		>
 			{#each pinnedSources as source}

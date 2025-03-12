@@ -20,6 +20,10 @@ class SourceStore {
     });
 
     recoverState(): void {
+        console.log({list: this.loadSourcesFromLocalStorage(),
+            pinned: this.loadPinnedSourcesFromLocalStorage(),
+            columns: this.loadColumnsFromLocalStorage()}
+        )
         this.state = {
             ...this.state,
             list: this.loadSourcesFromLocalStorage(),
