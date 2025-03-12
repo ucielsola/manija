@@ -74,7 +74,7 @@
 			<PinnedSources {onAddSource} />
 		</div>
 
-		<div class="border-t p-6 pt-2 h-96">
+		<div class="border-t h-96">
 			<SourceList {onAddSource} />
 		</div>
 	</div>

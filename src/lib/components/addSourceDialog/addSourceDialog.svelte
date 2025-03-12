@@ -85,7 +85,7 @@
 					size="tiny"
 					type="secondary"
 					onclick={onSave}
-					disabled={!isValid({ url, name }) || !urlAlreadyExists}
+					disabled={!isValid({ url, name }) || urlAlreadyExists}
 				>
 					Guardar
 				</Button>

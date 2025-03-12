@@ -20,7 +20,7 @@
 	);
 </script>
 
-<div class="flex flex-col gap-2 overflow-hidden">
+<div class="flex flex-col gap-2 overflow-hidden h-full">
 	<div class="flex items-center justify-between p-2">
 		<h3 class="text-primary-foreground scroll-m-20 text-xl font-extrabold tracking-tight">
 			Todas las fuentes
@@ -31,7 +31,7 @@
 		</div>
 	</div>
 
-	<div class="flex items-center gap-8 overflow-auto p-2 py-0">
+	<div class="flex items-center gap-8 h-full overflow-auto p-2 py-0">
 		<div class="flex items-center gap-8 overflow-auto p-4 pl-0">
 			{#if !loaded}
 				{#each Array(4) as _}
@@ -44,7 +44,9 @@
 			{:else}
 				{#each filteredSources as source, index (index)}
 					{@const isLast = index === filteredSources.length - 1}
-					<Source {source} />
+					<div class="pt-16">
+						<Source {source} />
+					</div>
 
 					{#if isLast}
 						<button
