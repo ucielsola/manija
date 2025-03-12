@@ -12,10 +12,8 @@
 	let name = $state('');
 	let sources = $derived(sourceStore.sources);
 	let urlAlreadyExists = $derived(
-		sources.some((source) => source.id === youtubeURLs.extractURLId(url))
+		!!sources.find((source) => source.id === youtubeURLs.extractURLId(url))
 	);
-
-	const { addSource } = sourceStore;
 
 	const urlRegEx = /^(https?):\/\/(?=.*\.[a-z]{2,})[^\s$.?#].[^\s]*$/i;
 	const urlSchema = z.string().refine((value) => urlRegEx.test(value));
@@ -28,7 +26,7 @@
 		const embedURL = youtubeURLs.makeEmbedURL(url);
 		const urlId = youtubeURLs.extractURLId(url);
 
-		addSource({ url: embedURL, name, id: urlId });
+		sourceStore.addSource({ url: embedURL, name, id: urlId });
 
 		open = false;
 	};
