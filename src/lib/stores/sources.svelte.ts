@@ -102,52 +102,67 @@ class SourceStore {
     }
 
     private saveStateToLocalStorage(): void {
-        this.saveToLocalStorage('sources', this.state.list);
-        this.saveToLocalStorage('pinned', this.state.pinned);
-        this.saveToLocalStorage('columns', this.state.columns);
+        try {
+            // Save sources as a single array
+            localStorage.setItem('sources', JSON.stringify(this.state.list));
+            
+            // Save pinned sources as a single array
+            localStorage.setItem('pinned-sources', JSON.stringify(this.state.pinned));
+            
+            // Save columns
+            localStorage.setItem('columns', this.state.columns.toString());
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
     }
 
     private loadColumnsFromLocalStorage(): number {
-        const columns = this.loadFromLocalStorage('columns') as number;
-        return columns ? columns : 1;
+        try {
+            const columns = localStorage.getItem('columns');
+            return columns ? parseInt(columns, 10) : 1;
+        } catch (error) {
+            console.error('Error loading columns:', error);
+            return 1;
+        }
     }
 
     private loadSourcesFromLocalStorage(): Source[] {
-        const sources: Source[] = [];
-        const keys = Object.keys(localStorage).filter((key) => key.startsWith('source-'));
-        keys.forEach((key) => {
-            const source = localStorage.getItem(key);
-            if (source) {
-                sources.push(JSON.parse(source));
-            }
-        });
-        return sources;
+        try {
+            const sourcesJson = localStorage.getItem('sources');
+            return sourcesJson ? JSON.parse(sourcesJson) : [];
+        } catch (error) {
+            console.error('Error loading sources:', error);
+            return [];
+        }
     }
 
     private loadPinnedSourcesFromLocalStorage(): Source[] {
-        const pinnedSources: Source[] = [];
-        const keys = Object.keys(localStorage).filter((key) => key.startsWith('pinned-source-'));
-        keys.forEach((key) => {
-            const source = localStorage.getItem(key);
-            if (source) {
-                pinnedSources.push(JSON.parse(source));
-            }
-        });
-        return pinnedSources;
-    }
-
-    private saveToLocalStorage(key: string, value: SourceState['list'] | SourceState['pinned'] | number): void {
-        localStorage.setItem(key, JSON.stringify(value));
-    }
-
-    private loadFromLocalStorage(key: string): SourceState['list'] | SourceState['pinned'] | number {
-        const value = localStorage.getItem(key);
-        return value ? JSON.parse(value) : [];
+        try {
+            const pinnedJson = localStorage.getItem('pinned-sources');
+            return pinnedJson ? JSON.parse(pinnedJson) : [];
+        } catch (error) {
+            console.error('Error loading pinned sources:', error);
+            return [];
+        }
     }
 
     private deleteSourceFromLocalStorage(id: string): void {
         if (!id) return;
-        localStorage.removeItem(id);
+        try {
+            // Load current arrays
+            const sources = this.loadSourcesFromLocalStorage();
+            const pinnedSources = this.loadPinnedSourcesFromLocalStorage();
+
+            // Filter out the deleted source
+            const updatedSources = sources.filter(source => source.id !== id);
+            const updatedPinnedSources = pinnedSources.filter(source => source.id !== id);
+
+            // Save updated arrays
+            localStorage.setItem('sources', JSON.stringify(updatedSources));
+            localStorage.setItem('pinned-sources', JSON.stringify(updatedPinnedSources));
+        } catch (error) {
+            console.error('Error deleting source:', error);
+        }
     }
 
     get sources(): Source[] {
