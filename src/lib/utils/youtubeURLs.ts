@@ -16,7 +16,7 @@ const makeEmbedURL = (url: string) => {
 
 	if (!url.includes('embed')) {
 		const urlParts = url.split('watch?v=');
-		newUrl = urlParts[0] + 'embed/' + urlParts[1];
+		newUrl = urlParts[0] + 'embed/' + urlParts[1] + `?enablejsapi=1`
 
 		return newUrl;
 	} else {
@@ -24,7 +24,13 @@ const makeEmbedURL = (url: string) => {
 	}
 };
 
+const thumbnailURL = (id: string) => {
+	console.log({id})
+	return `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+}
+
 export const youtubeURLs = {
 	extractURLId,
-	makeEmbedURL
+	makeEmbedURL,
+	thumbnailURL
 };
