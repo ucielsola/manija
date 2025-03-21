@@ -11,9 +11,10 @@ export class ToastStore {
     addToast(toast: Omit<Toast, 'id'>): void {
         const id = `${new Date().getTime()}`
         this.toasts.push({ ...toast, id });
+        this.scheduleClear(id);
     }
 
-    scheduleClear(id: string) {
+    private scheduleClear(id: string) {
         setTimeout(() => {
             this.toasts = this.toasts.filter((toast) => toast.id !== id);
         }, ToastStore.DurationMS);

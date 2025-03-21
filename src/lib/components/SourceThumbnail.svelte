@@ -21,7 +21,7 @@
 		sourceList.deleteSource(source.id, () => {
 			toastStore.addToast({
 				text: 'Video eliminado',
-				type: 'success'
+				type: 'primary'
 			});
 		});
 	};

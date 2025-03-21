@@ -12,7 +12,7 @@
 </div>
 
 {#snippet Toast(t: Toast)}
-	<div class="alert {`alert-${t.type}`}">
+	<div class={`alert alert-${t.type}`}>
 		<span>{t.text}</span>
 	</div>
 {/snippet}
