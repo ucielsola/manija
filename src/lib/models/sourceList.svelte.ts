@@ -1,5 +1,5 @@
 import { AppStorage } from "$lib/models/appStorage";
-import { Source, type SourceData } from "$lib/models/Source.svelte";
+import { Source, type SourceData } from "$lib/models/source.svelte";
 import { youtubeURLs } from "$lib/utils/youtubeURLs";
 
 export class SourceList {
