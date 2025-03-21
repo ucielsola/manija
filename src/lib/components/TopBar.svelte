@@ -3,6 +3,8 @@
 	import ColumnAmountSelector from '$lib/components/ColumnAmountSelector.svelte';
 	import { app, sourceList } from '$lib/stores';
 	import ThemeSwitcher from './ThemeSwitcher.svelte';
+	import Sound from './icons/Sound.svelte';
+	import SoundOff from './icons/SoundOff.svelte';
 </script>
 
 <div class="navbar  bg-base-100 shadow-sm border-b px-4">
@@ -29,8 +31,8 @@
 		</div>
 
 		<button class="btn btn-outline btn-error btn-sm" onclick={() => sourceList.muteAll()}>
-			<Refresh className="w-4 h-4" />
-			Mutear Todo
+				<SoundOff className="w-4 h-4" />
+				Mutear
 		</button>
 
 		<button class="btn btn-outline btn-error btn-sm" onclick={() => app.showDeleteAll = true}>

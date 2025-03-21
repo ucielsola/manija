@@ -6,6 +6,8 @@ export class SourceList {
     private _storage?: AppStorage;
     private _sources = $state<Source[]>([]);
     private _pinned = $derived<Source[]>(this._sources.filter((source) => source.pinned));
+    private _muted = $derived<Source[]>(this._sources.filter((source) => source.muted));
+    private _allMuted = $derived<boolean>(this._muted.length === this._sources.length);
 
     initStorage(): void {
         if (this._storage) {
@@ -23,6 +25,10 @@ export class SourceList {
 
     get pinned(): Source[] {
         return this._pinned.toReversed()
+    }
+
+    get allMuted(): boolean {
+        return this._allMuted;
     }
 
     toggleSourcePin(id: string): void {
@@ -63,7 +69,7 @@ export class SourceList {
     }
 
     muteAll(): void {
-        this._sources.forEach((source) => source.toggleMute());
+        this._sources.forEach((source) => source.setMute(true));
     }
 
     deleteAllSources(): void {

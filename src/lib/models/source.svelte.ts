@@ -54,6 +54,10 @@ export class Source {
         this._pinned = value;
     }
 
+    get muted() {
+        return this._muted;
+    }
+
     get data(): SourceData {
         return {
             url: this._url,
@@ -74,9 +78,9 @@ export class Source {
         this._pinned = !this._pinned;
     }
 
-    toggleMute() {
+    setMute(mute: boolean) {
         if (this._controller) {
-            this._muted ? this._controller.unMute() : this._controller.mute();
+            mute ? this._controller.mute() : this._controller.unMute();
         }
     }
 }

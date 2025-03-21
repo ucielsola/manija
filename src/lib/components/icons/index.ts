@@ -11,3 +11,5 @@ export { default as Trash } from './Trash.svelte';
 export { default as ChevronLeft } from './ChevronLeft.svelte';
 export { default as Save } from './Save.svelte';
 export { default as Check } from './Check.svelte';
+export { default as Sound } from './Sound.svelte';
+export { default as SoundOff } from './SoundOff.svelte';
