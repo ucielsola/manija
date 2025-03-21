@@ -12,33 +12,30 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^3.0.0",
-		"@sveltejs/kit": "^2.0.0",
-		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@sveltejs/adapter-vercel": "^5.6.3",
+		"@sveltejs/kit": "^2.20.1",
+		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"@types/eslint": "^8.56.7",
-		"autoprefixer": "^10.4.19",
 		"eslint": "^9.0.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
-		"globals": "^15.0.0",
-		"kampsy-ui": "^1.0.1",
-		"postcss": "^8.4.38",
-		"prettier": "^3.1.1",
-		"prettier-plugin-svelte": "^3.1.2",
-		"prettier-plugin-tailwindcss": "^0.6.4",
-		"svelte": "^5.0.0-next.1",
-		"svelte-check": "^3.6.0",
-		"tailwindcss": "^3.4.4",
-		"tslib": "^2.4.1",
-		"typescript": "^5.0.0",
-		"typescript-eslint": "^8.0.0-alpha.20",
-		"vite": "^5.0.3"
+		"globals": "^16.0.0",
+		"prettier": "^3.5.3",
+		"prettier-plugin-svelte": "^3.3.3",
+		"svelte": "^5.23.2",
+		"svelte-check": "^4.1.5",
+		"tslib": "^2.8.1",
+		"typescript": "^5.8.2",
+		"typescript-eslint": "^8.26.1",
+		"vite": "^6.2.2"
 	},
 	"type": "module",
 	"dependencies": {
+		"@tailwindcss/vite": "^4.0.14",
 		"@vercel/analytics": "^1.5.0",
-		"lucide-svelte": "^0.414.0",
-		"svelte-sonner": "^0.3.28",
-		"zod": "^3.23.8"
+		"daisyui": "^5.0.6",
+		"tailwindcss": "^4.0.14",
+		"youtube-iframe-ctrl": "^1.0.3",
+		"zod": "^3.24.2"
 	}
 }

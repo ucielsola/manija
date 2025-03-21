@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { className } : { className?: string } = $props()
+	let { className }: { className?: string } = $props();
 </script>
 
 <svg
@@ -14,8 +14,8 @@
 		stroke-linecap="round"
 		stroke-linejoin="round"
 		stroke-width="2"
-		><path d="M2 8a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z" /><path
-			d="m10 9l5 3l-5 3z"
+		><path d="M3 17a3 3 0 1 0 6 0a3 3 0 0 0-6 0m10 0a3 3 0 1 0 6 0a3 3 0 0 0-6 0" /><path
+			d="M9 17V4h10v13M9 8h10"
 		/></g
 	>
 </svg>
