@@ -1,1 +1,1 @@
-export const ThumbnailButtons = 3
+export const SourcNameMaxLength = 24

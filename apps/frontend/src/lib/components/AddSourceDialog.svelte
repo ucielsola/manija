@@ -6,7 +6,8 @@
 
 	import { youtubeURLs } from '$lib/utils/youtubeURLs';
 	import { app, sourceList } from '$lib/stores';
-	import FocusTrap from './common/FocusTrap.svelte';
+	import FocusTrap from '$lib/components/common/FocusTrap.svelte';
+	import { getYoutubeUrlFromClipboard } from '$lib/utils/clipboard';
 
 	const urlRegEx = /^(https?):\/\/(?=.*\.[a-z]{2,})[^\s$.?#].[^\s]*$/i;
 	const urlSchema = z.string().refine((value) => urlRegEx.test(value));
@@ -31,10 +32,21 @@
 		app.showAddSource = false;
 	};
 
+	const onOpen = async () => {
+		const youtubeUrl = await getYoutubeUrlFromClipboard();
+
+		if (youtubeUrl) {
+			url = youtubeUrl;
+			name = await youtubeURLs.getVideoName(url);
+		}
+	};
+
 	$effect(() => {
 		if (!open) {
 			url = '';
 			name = '';
+		} else {
+			onOpen();
 		}
 	});
 </script>
