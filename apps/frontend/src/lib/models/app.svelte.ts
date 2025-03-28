@@ -5,7 +5,7 @@ export class App implements StorageProvider {
     private _loaded = $state<boolean>(false);
     private _theme = $state<'light' | 'dark'>('light');
     private _columns = $state<number>(1);
-    private _sideBarCollapsed = $state<boolean>(false);
+    private _sideBarCollapsed = $state<boolean>(true);
     private _showAddSource = $state<boolean>(false);
     private _showDeleteAll = $state<boolean>(false);
 

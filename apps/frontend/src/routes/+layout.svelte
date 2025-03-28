@@ -24,6 +24,9 @@
 		setTimeout(() => {
 			app.initStorage();
 			sourceList.initStorage();
+			setTimeout(() => {
+				app.toggleSidebar();
+			}, 800);
 		}, 800);
 	});
 </script>
