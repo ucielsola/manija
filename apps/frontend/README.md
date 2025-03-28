@@ -1,38 +1,82 @@
-# create-svelte
+# MANIJA TV
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+![Svelte](https://img.shields.io/badge/Svelte_5-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS_4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![DaisyUI](https://img.shields.io/badge/DaisyUI-5A0EF8?style=for-the-badge&logo=daisyui&logoColor=white)
 
-## Creating a project
+A modern web application for streaming content, built with cutting-edge technologies.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
+
+- **Responsive Design** - Beautiful UI that works on all device sizes
+- **Fast Performance** - Built with SvelteKit for optimal speed
+- **YouTube Integration** - Seamless video streaming capabilities
+- **Modern UI** - Enhanced with DaisyUI components
+- **Type Safety** - Fully typed with TypeScript and Zod validation
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v16.0 or higher recommended)
+- npm or pnpm
+
+### Installation
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
+# Clone the repository
+git clone https://github.com/yourusername/manija-tv.git
+cd manija-tv/apps/frontend
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+# Install dependencies
+npm install
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
+# Start development server
 npm run dev
 
-# or start the server and open the app in a new browser tab
+# Open in browser (optional)
 npm run dev -- --open
 ```
 
-## Building
-
-To create a production version of your app:
+## Development
 
 ```bash
-npm run build
+# Run type checking
+npm run check
+
+# Format code
+npm run format
+
+# Lint code
+npm run lint
 ```
 
-You can preview the production build with `npm run preview`.
+## Build
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+```bash
+# Create production build
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Technologies
+
+- [SvelteKit](https://kit.svelte.dev/) - Full-stack application framework
+- [TailwindCSS 4](https://tailwindcss.com/) - Utility-first CSS framework
+- [DaisyUI](https://daisyui.com/) - Component library for Tailwind
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [Zod](https://zod.dev/) - Schema validation
+- [YouTube iframe controller](https://github.com/youtube/youtube-iframe-player-api) - Video integration
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgements
+
+- [Svelte team](https://svelte.dev/) for creating an amazing framework
+- [Vercel](https://vercel.com/) for hosting and deployment
+- All contributors and supporters of this project
