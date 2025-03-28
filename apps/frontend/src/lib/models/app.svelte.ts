@@ -82,4 +82,15 @@ export class App implements StorageProvider {
             throw new Error("Storage has not been initialized. Call initStorage() first.");
         }
     }
+
+    dismissOpenDialogs(): void {
+        if (!this._showAddSource && !this._showDeleteAll && !this._renamingSourceId) {
+            this.toggleSidebar();
+        } else {
+            this._showAddSource = false;
+            this._showDeleteAll = false;
+            this._renamingSourceId = null;
+        }
+
+    }
 }

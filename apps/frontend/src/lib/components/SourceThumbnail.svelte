@@ -32,26 +32,26 @@
 </script>
 
 <Hoverable onHoverChange={handleHover}>
-	<div class="relative w-full aspect-video rounded-md border border-primary">
-		<figure class="relative w-full h-full rounded-md border-primary overflow-hidden">
+	<div class="border-primary relative aspect-video w-full rounded-md border">
+		<figure class="border-primary relative h-full w-full overflow-hidden rounded-md">
 			<img
 				src={source.thumbnail}
 				alt={source.name}
-				class={`w-full h-full rounded-md border-primary scale-105 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+				class={`border-primary h-full w-full scale-105 rounded-md ${loaded ? 'opacity-100' : 'opacity-0'}`}
 				onload={() => (loaded = true)}
 			/>
 		</figure>
 
 		<div
-			class="absolute top-0 left-0 flex flex-col gap-2 justify-center w-full h-full bg-base-200/0 {hovered
+			class="bg-base-200/0 absolute top-0 left-0 flex h-full w-full flex-col justify-center gap-2 {hovered
 				? 'opacity-100'
 				: 'opacity-0'} transition-opacity"
 		>
-			<div class="absolute top-0 left-0 w-full bg-primary rounded-t-md px-2">
-				<span class="text-primary-content font-semibold text-sm">{source.name}</span>
+			<div class="bg-primary absolute top-0 left-0 w-full rounded-t-md px-2">
+				<span class="text-primary-content text-sm font-semibold">{source.name}</span>
 			</div>
 
-			<div class="flex items-center gap-2 justify-center">
+			<div class="flex items-center justify-center gap-2">
 				<button
 					class="btn btn-square btn-sm {source.pinned ? 'btn-soft btn-primary' : 'btn-primary'}"
 					onclick={handlePin}
@@ -64,7 +64,11 @@
 					{/if}
 				</button>
 
-				<button class="btn btn-square btn-sm btn-primary" onclick={handleRename} aria-label="Delete">
+				<button
+					class="btn btn-square btn-sm btn-primary"
+					onclick={handleRename}
+					aria-label="Delete"
+				>
 					<Pencil className="w-5 h-5" />
 				</button>
 

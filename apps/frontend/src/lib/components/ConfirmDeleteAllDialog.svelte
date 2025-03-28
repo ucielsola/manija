@@ -13,6 +13,14 @@
 		sourceList.reset();
 		app.showDeleteAll = false;
 	};
+
+	let cancelButton: HTMLButtonElement
+
+	$effect(() => {
+		if (open) {
+			cancelButton?.focus()
+		}
+	})
 </script>
 
 <dialog class={`modal ${open ? 'modal-open' : ''}`}>
@@ -26,7 +34,7 @@
 
 				<div class="flex w-full flex-col gap-4">
 					<div class="flex w-full items-center justify-end gap-4">
-						<button class="btn btn-outline btn-sm" aria-label="Cancel" onclick={onCancel}>
+						<button bind:this={cancelButton} class="btn btn-outline btn-sm" aria-label="Cancel" onclick={onCancel}>
 							<ChevronLeft className="w-4 h-4" />
 							Cancelar
 						</button>

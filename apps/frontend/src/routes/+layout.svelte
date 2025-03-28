@@ -30,34 +30,45 @@
 			}, 800);
 		}, 800);
 	});
+
+	const handleKeydown = (e: KeyboardEvent) => {
+		if (e.key === 'Escape') {
+			app.dismissOpenDialogs()
+		}
+
+		if (e.key === 'Tab') {
+			console.log(document.activeElement);
+		}
+	};
 </script>
 
-<div class="h-dvh w-dvw flex flex-col overflow-hidden" data-theme={app.theme}>
+<svelte:window onkeydown={handleKeydown} />
+
+<div class="flex h-dvh w-dvw flex-col-reverse overflow-hidden" data-theme={app.theme}>
+	<div class="flex grow overflow-hidden">
+		{#if app.loaded}
+			<div class="relative flex h-full w-full grow overflow-hidden" in:fade>
+				<SideBarToggle />
+				<SideBar />
+				<div class="relative z-10 grow overflow-hidden">
+					{@render children()}
+				</div>
+			</div>
+		{:else}
+			<div class="flex h-full w-full items-center justify-center">
+				<Tv className="h-48 w-48 text-primary animate-pulse" />
+			</div>
+		{/if}
+	</div>
+
 	{#if app.loaded}
 		<div in:fade>
 			<TopBar />
 		</div>
 	{/if}
-
-	<div class="flex grow overflow-hidden">
-		{#if app.loaded}
-			<div class="relative flex grow h-full w-full overflow-hidden" in:fade>
-				<SideBarToggle />
-				<SideBar />
-				<div class="relative z-10 grow overflow-hidden">	
-					{@render children()}
-				</div>
-			</div>
-		{:else}
-			<div class="flex items-center justify-center h-full w-full">
-				<Tv className="h-48 w-48 text-primary animate-pulse" />
-			</div>
-		{/if}
-	</div>
 </div>
 
 <Toasts />
 <AddSourceDialog />
 <ConfirmDeleteAllDialog />
 <RenameSourceDialog />
-

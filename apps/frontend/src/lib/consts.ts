@@ -1,0 +1,1 @@
+export const ThumbnailButtons = 3
