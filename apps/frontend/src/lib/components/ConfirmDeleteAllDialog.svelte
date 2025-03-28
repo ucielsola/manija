@@ -16,9 +16,9 @@
 
 <dialog class={`modal ${open ? 'modal-open' : ''}`}>
 	<div class="modal-box">
-		<h3 class="text-lg font-bold">Agregar Video</h3>
+		<h3 class="text-lg font-bold">Reiniciar</h3>
 		<p class="py-4 text-sm">
-			Copiá la URL del video de Youtube, y escribí el nombre que quieras asignarle.
+			¿Estás seguro de que quieres reiniciar Manija TV? Se borrarán todos los videos.
 		</p>
 
 		<div class="flex flex-col gap-4 w-full">
