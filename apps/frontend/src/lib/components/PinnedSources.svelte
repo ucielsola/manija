@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { Plus } from '$lib/components/icons';
-	
+
 	import Source from '$lib/components/Source.svelte';
 	import Guide from '$lib/components/Guide.svelte';
 
 	import { app, sourceList } from '$lib/stores';
-	
+	import { fade } from 'svelte/transition';
+
 	let columns = $derived(app.columns);
 	let pinnedSources = $derived(sourceList.pinned);
 </script>
@@ -23,9 +24,9 @@
 					<Source {source} />
 				{/each}
 
-				<div class="flex min-h-48 gap-4">
+				<div class="flex min-h-48 gap-4" in:fade|global={{ delay: 1000 }}>
 					<div
-						class="flex h-full w-full items-center justify-center gap-4 rounded-md border border-primary border-dashed px-8 py-6"
+						class="border-primary flex h-full w-full items-center justify-center gap-4 rounded-md border border-dashed px-8 py-6"
 					>
 						<button
 							class="btn btn-outline btn-wide btn-primary"

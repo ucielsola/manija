@@ -15,7 +15,7 @@
 		onchange={(e) => handleSelect(Number((e.target as HTMLSelectElement).value))}
 	>
 		{#each columnOptions as option}
-			<option class="flex items-center justify-between">
+			<option class="flex items-center justify-between" value={option} selected={option === app.columns}>
 				{option}
 			</option>
 		{/each}
