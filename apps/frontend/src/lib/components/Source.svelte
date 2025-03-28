@@ -51,28 +51,31 @@
 		{#if isHovered}
 			<div
 				transition:fade
-				class="absolute right-0 top-0 z-20 flex h-fit w-fit items-center justify-end"
+				class="absolute right-0 top-0 z-20 flex h-fit w-fit items-center justify-end "
 			>
-				<div class="bg-accent flex items-center justify-center gap-2 rounded-bl-lg p-3">
-					<button class="btn btn-square btn-sm btn-secondary" onclick={handleRefresh} aria-label="Refresh">
-						<Refresh className="w-5 h-5" />
-					</button>
-
-					<button
-						class="btn btn-square btn-sm {source.pinned ? 'btn-soft btn-primary' : 'btn-primary'}"
-						onclick={handlePin}
-						aria-label={source.pinned ? 'Unpin' : 'Pin'}
-					>
-						{#if source.pinned}
-							<PinOff className="w-5 h-5" />
-						{:else}
-							<Pin className="w-5 h-5" />
-						{/if}
-					</button>
-
-					<button class="btn btn-square btn-sm btn-error" onclick={handleDelete} aria-label="Delete">
-						<Trash className="w-5 h-5" />
-					</button>
+				<div class="bg-accent p-3 pt-1 gap-1 flex flex-col rounded-bl-lg">
+					<span class="text-sm font-bold">{source.name}</span>
+					<div class="flex items-center justify-center gap-2 rounded-bl-lg">
+						<button class="btn btn-square btn-sm btn-secondary" onclick={handleRefresh} aria-label="Refresh">
+							<Refresh className="w-5 h-5" />
+						</button>
+	
+						<button
+							class="btn btn-square btn-sm {source.pinned ? 'btn-soft btn-primary' : 'btn-primary'}"
+							onclick={handlePin}
+							aria-label={source.pinned ? 'Unpin' : 'Pin'}
+						>
+							{#if source.pinned}
+								<PinOff className="w-5 h-5" />
+							{:else}
+								<Pin className="w-5 h-5" />
+							{/if}
+						</button>
+	
+						<button class="btn btn-square btn-sm btn-error" onclick={handleDelete} aria-label="Delete">
+							<Trash className="w-5 h-5" />
+						</button>
+					</div>
 				</div>
 			</div>
 		{/if}

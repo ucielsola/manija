@@ -34,6 +34,10 @@ export class Source {
         return this._name;
     }
 
+    set name(value: string) {
+        this._name = value;
+    }
+
     get url() {
         return this._url;
     }

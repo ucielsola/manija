@@ -15,4 +15,6 @@ export { default as Sound } from './Sound.svelte';
 export { default as SoundOff } from './SoundOff.svelte';
 export { default as Github } from './Github.svelte';
 export { default as LinkedIn } from './LinkedIn.svelte';
+export { default as Pencil } from './Pencil.svelte';
+
 

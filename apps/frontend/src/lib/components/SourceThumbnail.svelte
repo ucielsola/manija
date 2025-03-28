@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { Pin, PinOff, Trash } from '$lib/components/icons';
+	import { Pin, PinOff, Trash, Pencil } from '$lib/components/icons';
 	import { Hoverable } from '$lib/components/common';
-	import { sourceList, toastStore } from '$lib/stores';
+	import { app, sourceList, toastStore } from '$lib/stores';
 	import type { Source } from '$lib/models/source.svelte';
 
 	let { source }: { source: Source } = $props();
@@ -24,6 +24,10 @@
 				type: 'primary'
 			});
 		});
+	};
+
+	const handleRename = () => {
+		app.renamingSourceId = source.id;
 	};
 </script>
 
@@ -58,6 +62,10 @@
 					{:else}
 						<Pin className="w-5 h-5" />
 					{/if}
+				</button>
+
+				<button class="btn btn-square btn-sm btn-primary" onclick={handleRename} aria-label="Delete">
+					<Pencil className="w-5 h-5" />
 				</button>
 
 				<button class="btn btn-square btn-sm btn-error" onclick={handleDelete} aria-label="Delete">

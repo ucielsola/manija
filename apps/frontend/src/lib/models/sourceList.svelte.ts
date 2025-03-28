@@ -59,6 +59,17 @@ export class SourceList {
         this._storage!.set('sources', this._sources.map(s => s.data)); 
     }
 
+    renameSource(id: string, name: string): void {
+        this.checkStorage();
+        if (!id || !this._sources?.length) return;
+
+        const source = this._sources.find((source) => source.id === id);
+        if (!source) return;
+
+        source.name = name;
+        this._storage!.set('sources', this._sources.map(s => s.data));
+    }
+
     deleteSource(id: string, onSuccess?: () => void): void {
         this.checkStorage();
         if (!id || !this._sources?.length) return;

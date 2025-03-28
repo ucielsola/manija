@@ -16,6 +16,7 @@
 	import SideBarToggle from '$lib/components/SideBarToggle.svelte';
 	import AddSourceDialog from '$lib/components/AddSourceDialog.svelte';
 	import ConfirmDeleteAllDialog from '$lib/components/ConfirmDeleteAllDialog.svelte';
+	import RenameSourceDialog from '$lib/components/RenameSourceDialog.svelte';
 
 	let { children }: { children: Snippet } = $props();
 
@@ -58,5 +59,5 @@
 <Toasts />
 <AddSourceDialog />
 <ConfirmDeleteAllDialog />
-
+<RenameSourceDialog />
 

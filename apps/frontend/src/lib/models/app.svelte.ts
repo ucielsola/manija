@@ -8,6 +8,7 @@ export class App implements StorageProvider {
     private _sideBarCollapsed = $state<boolean>(true);
     private _showAddSource = $state<boolean>(false);
     private _showDeleteAll = $state<boolean>(false);
+    private _renamingSourceId = $state<string | null>(null);
 
     public initStorage(): void {
         if (this.storage) {
@@ -40,6 +41,14 @@ export class App implements StorageProvider {
 
     get columns(): number {
         return this._columns;
+    }
+
+    get renamingSourceId(): string | null {
+        return this._renamingSourceId;
+    }
+
+    set renamingSourceId(value: string | null) {
+        this._renamingSourceId = value;
     }
 
     set columns(value: number) {
