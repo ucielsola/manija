@@ -5,20 +5,32 @@
 
 	import { inject as injectVercelAnalytics } from '@vercel/analytics';
 
-	import { Tv } from '$lib/components/icons';
 	import TopBar from '$lib/components/TopBar.svelte';
 	import SideBar from '$lib/components/SideBar.svelte';
 	import Toasts from '$lib/components/Toasts.svelte';
 
 	import { app, sourceList } from '$lib/stores';
 
-	import type { Snippet } from 'svelte';
+	import Intro from '$lib/components/Intro.svelte';
 	import SideBarToggle from '$lib/components/SideBarToggle.svelte';
 	import AddSourceDialog from '$lib/components/AddSourceDialog.svelte';
 	import ConfirmDeleteAllDialog from '$lib/components/ConfirmDeleteAllDialog.svelte';
 	import RenameSourceDialog from '$lib/components/RenameSourceDialog.svelte';
 
+	import type { Snippet } from 'svelte';
+
 	let { children }: { children: Snippet } = $props();
+
+	const recursiveCheck = () => {
+		app.checkClipboardAccess();
+		if (!app.hasClipboardAccess) {
+			setTimeout(() => {
+				recursiveCheck();
+			}, 1000);
+		}
+	};
+
+	recursiveCheck();
 
 	$effect(() => {
 		injectVercelAnalytics();
@@ -33,16 +45,20 @@
 
 	const handleKeydown = (e: KeyboardEvent) => {
 		if (e.key === 'Escape') {
-			app.dismissOpenDialogs()
+			app.dismissOpenDialogs();
 		}
 	};
+
+	$inspect(app.showIntro)
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
 
 <div class="flex h-dvh w-dvw flex-col-reverse overflow-hidden" data-theme={app.theme}>
-	<div class="flex grow overflow-hidden">
-		{#if app.loaded}
+	{#if app.showIntro}
+		<Intro />
+	{:else}
+		<div class="flex grow overflow-hidden" in:fade={{delay: 400}}>
 			<div class="relative flex h-full w-full grow overflow-hidden" in:fade>
 				<SideBarToggle />
 				<SideBar />
@@ -50,14 +66,8 @@
 					{@render children()}
 				</div>
 			</div>
-		{:else}
-			<div class="flex h-full w-full items-center justify-center">
-				<Tv className="h-48 w-48 text-primary animate-pulse" />
-			</div>
-		{/if}
-	</div>
+		</div>
 
-	{#if app.loaded}
 		<div in:fade>
 			<TopBar />
 		</div>

@@ -2,13 +2,14 @@ import { AppStorage, type StorageProvider } from "$lib/models/appStorage";
 
 export class App implements StorageProvider {
     storage?: AppStorage;
-    private _loaded = $state<boolean>(false);
+    private _showIntro = $state<boolean>(true);
     private _theme = $state<'light' | 'dark'>('light');
     private _columns = $state<number>(1);
     private _sideBarCollapsed = $state<boolean>(true);
     private _showAddSource = $state<boolean>(false);
     private _showDeleteAll = $state<boolean>(false);
     private _renamingSourceId = $state<string | null>(null);
+    private _hasClipboardAccess = $state<boolean>(false);
 
     public initStorage(): void {
         if (this.storage) {
@@ -17,10 +18,14 @@ export class App implements StorageProvider {
         }
 
         this.storage = new AppStorage();
-        this._loaded = true;
+        this._showIntro = true;
 
         this._theme = this.storage.get<'light' | 'dark'>('theme') ?? 'light';
         this._columns = this.storage.get<number>('columns') ?? 1;
+    }
+
+    get hasClipboardAccess(): boolean {
+        return this._hasClipboardAccess;
     }
 
     get showAddSource(): boolean {
@@ -69,8 +74,28 @@ export class App implements StorageProvider {
         this.storage!.set('theme', value);
     }
 
-    get loaded(): boolean {
-        return this._loaded;
+    get showIntro(): boolean {
+        return this._showIntro;
+    }
+
+    set showIntro(show: boolean) {
+        this._showIntro = show
+    }
+
+    async checkClipboardAccess() {
+        if (this._hasClipboardAccess) {
+            this._showIntro = false;
+            return;
+        }
+
+        if (typeof navigator === 'undefined') {
+            console.error("NO NAVI!")
+            return;
+        }
+
+        const permission = await navigator.permissions.query({ name: 'clipboard-read' })
+
+        this._hasClipboardAccess = permission?.state === 'granted';
     }
 
     toggleSidebar(): void {
