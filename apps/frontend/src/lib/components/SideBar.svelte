@@ -20,6 +20,7 @@
 			<button
 				class="btn btn-outline btn-wide btn-sm btn-primary mt-8"
 				onclick={() => (app.showAddSource = true)}
+				aria-label="Add Video"
 			>
 				<Plus className="w-4 h-4" />
 				Agregar Video
@@ -50,14 +51,12 @@
 		</span>
 
 		<div class="flex items-center gap-2">
-			<a href="https://github.com/ucielsola/manija/tree/main/apps/frontend" title="GitHub" target="_blank" class="cursor-pointer text-primary dark:text-secondary hover:scale-105 transition-transform">
+			<a href="https://github.com/ucielsola/manija/tree/main/apps/frontend" title="GitHub" aria-label="GitHub" target="_blank" class="cursor-pointer text-primary dark:text-secondary hover:scale-105 transition-transform">
 				<Github className="w-5 h-5" />
 			</a>
-			<a href="https://linkedin.com/in/ucielsola" title="LinkedIn" target="_blank" class="cursor-pointer text-primary dark:text-secondary hover:scale-105 transition-transform">
+			<a href="https://linkedin.com/in/ucielsola" title="LinkedIn" aria-label="LinkedIn" target="_blank" class="cursor-pointer text-primary dark:text-secondary hover:scale-105 transition-transform">
 				<LinkedIn className="w-5 h-5" />
 			</a>
 		</div>
-
-
 	</div>
 </div>

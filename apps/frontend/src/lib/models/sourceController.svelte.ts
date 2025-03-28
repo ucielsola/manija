@@ -9,7 +9,6 @@ export class SourceController {
    private lastMutedState = $state<boolean>(false);
 
     constructor(iframe: HTMLIFrameElement) {
-        console.log("SourceController constructor");
         this.controller = new YouTubeIFrameCtrl(iframe);
 
         iframe.addEventListener('ytmessage' as keyof HTMLElementEventMap, (e: Event)=> {

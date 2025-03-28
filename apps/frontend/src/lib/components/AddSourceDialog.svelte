@@ -39,48 +39,56 @@
 </script>
 
 <dialog class={`modal ${open ? 'modal-open' : ''}`}>
-	<div class="modal-box">
-		<h3 class="text-lg font-bold">Agregar Video</h3>
-		<p class="py-4 text-sm">
-			Copiá la URL del video de Youtube, y escribí el nombre que quieras asignarle.
-		</p>
+	{#if open}
+		<div class="modal-box">
+			<h3 class="text-lg font-bold">Agregar Video</h3>
+			<p class="py-4 text-sm">
+				Copiá la URL del video de Youtube, y escribí el nombre que quieras asignarle.
+			</p>
 
-		<div class="flex flex-col gap-4 w-full">
-			<div>
-				<Input
-					labelledby="url"
-					label="URL"
-					id="url"
-					type="text"
-					placeholder="https://..."
-					bind:value={url}
-				/>
+			<div class="flex w-full flex-col gap-4">
+				<div>
+					<Input
+						labelledby="url"
+						label="URL"
+						id="url"
+						type="text"
+						placeholder="https://..."
+						bind:value={url}
+						autoFocus
+					/>
 
-				<Input
-					labelledby="name"
-					label="Name"
-					id="name"
-					type="text"
-					placeholder="Nombre"
-					bind:value={name}
-				/>
-			</div>
+					<Input
+						labelledby="name"
+						label="Name"
+						id="name"
+						type="text"
+						placeholder="Nombre"
+						bind:value={name}
+					/>
+				</div>
 
-			<div class="flex items-center gap-4 w-full justify-end">
-				<button class="btn btn-outline btn-sm btn-error" onclick={onCancel}>
-					<Remove className="w-4 h-4" />
-					Cancelar
-				</button>
+				<div class="flex w-full items-center justify-end gap-4">
+					<button class="btn btn-outline btn-sm btn-error" aria-label="Cancel" onclick={onCancel}>
+						<Remove className="w-4 h-4" />
+						Cancelar
+					</button>
 
-				<button class="btn btn-sm btn-primary" disabled={disableSubmit} onclick={onSave}>
-					<Save className="w-4 h-4" />
-					Guardar
-				</button>
+					<button
+						class="btn btn-sm btn-primary"
+						aria-label="Save"
+						disabled={disableSubmit}
+						onclick={onSave}
+					>
+						<Save className="w-4 h-4" />
+						Guardar
+					</button>
+				</div>
 			</div>
 		</div>
-	</div>
+	{/if}
 
 	<form method="dialog" class="modal-backdrop" onsubmit={onCancel}>
-		<button>close</button>
+		<button aria-label="Close">close</button>
 	</form>
 </dialog>

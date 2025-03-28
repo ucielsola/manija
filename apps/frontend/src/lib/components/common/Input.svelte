@@ -6,13 +6,21 @@
 		type: string;
 		placeholder: string;
 		value: string;
+		autoFocus?: boolean;
 	};
 
-	let { label, labelledby, id, type, placeholder, value = $bindable('') }: InputProps = $props();
+	let { label, labelledby, id, type, placeholder, value = $bindable(''), autoFocus }: InputProps = $props();
+	let inputEl: HTMLInputElement;
+
+	$effect(() => {
+		if (autoFocus) {
+			inputEl.focus();
+		}
+	});
 </script>
 
 
 <fieldset class="fieldset">
 	<legend class="fieldset-legend">{label}</legend>
-	<input {type} {placeholder} bind:value aria-labelledby={labelledby} class="input" />
+	<input {id} {type} {placeholder} bind:value aria-labelledby={labelledby} class="input" bind:this={inputEl} />
 </fieldset>

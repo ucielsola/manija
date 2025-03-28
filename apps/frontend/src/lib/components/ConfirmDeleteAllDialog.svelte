@@ -23,11 +23,11 @@
 
 		<div class="flex flex-col gap-4 w-full">
 			<div class="flex items-center gap-4 w-full justify-end">
-				<button class="btn btn-outline btn-sm" onclick={onCancel}>
+				<button class="btn btn-outline btn-sm" aria-label="Cancel" onclick={onCancel}>
 					<ChevronLeft className="w-4 h-4" />
 					Cancelar
 				</button>
-				<button class="btn btn-sm btn-error" onclick={onConfirm}>
+				<button class="btn btn-sm btn-error" aria-label="Confirm" onclick={onConfirm}>
 					<Remove className="w-4 h-4" />
 					Si, borrar todo
 				</button>
@@ -36,6 +36,6 @@
 	</div>
 
 	<form method="dialog" class="modal-backdrop" onsubmit={onCancel}>
-		<button>close</button>
+		<button aria-label="Close">close</button>
 	</form>
 </dialog>

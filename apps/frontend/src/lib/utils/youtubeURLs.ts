@@ -25,7 +25,6 @@ const makeEmbedURL = (url: string) => {
 };
 
 const thumbnailURL = (id: string) => {
-	console.log({id})
 	return `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
 }
 
