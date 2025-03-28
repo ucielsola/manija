@@ -1,5 +1,5 @@
 <script lang="ts">
-	import NewSource from '$lib/components/Source.svelte';
+	import Source from '$lib/components/Source.svelte';
 	import Guide from '$lib/components/Guide.svelte';
 
 	import { app, sourceList } from '$lib/stores';
@@ -18,7 +18,7 @@
 				style={`grid-template-columns: repeat(${columns}, 1fr);`}
 			>
 				{#each pinnedSources as source (source.id)}
-					<NewSource {source} />
+					<Source {source} />
 				{/each}
 			</div>
 		</div>
