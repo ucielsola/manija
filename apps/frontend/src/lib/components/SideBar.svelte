@@ -13,9 +13,9 @@
 <div
 	class={`relative h-full ${width} transition-width flex flex-col overflow-visible duration-200`}
 >
-	<div class="grow overflow-hidden">
+	<div class={`grow overflow-hidden transition-transform duration-200 ${translate}`}>
 		<div
-			class={`bg-base-100 relative flex h-full w-64 flex-col gap-4 overflow-hidden border-r px-3 pt-3 transition-transform duration-200 ${translate}`}
+			class={`bg-base-100 relative flex h-full w-64 flex-col gap-4 overflow-hidden border-r px-3 pt-3`}
 		>
 			<button
 				class="btn btn-outline btn-wide btn-sm btn-primary mt-8"
@@ -39,7 +39,7 @@
 		</div>
 	</div>
 
-	<div class="flex h-8 w-full items-center justify-between gap-2 border-r border-t p-2">
+	<div class={`flex h-8 w-full items-center justify-between gap-2 border-r border-t p-2 transition-transform duration-200 overflow-hidden ${translate}`}>
 		<span class="text-xs">
 			🧠 By <a
 				href="https://ucielsola.dev"
