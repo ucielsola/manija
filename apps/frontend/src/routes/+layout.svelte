@@ -35,10 +35,6 @@
 		if (e.key === 'Escape') {
 			app.dismissOpenDialogs()
 		}
-
-		if (e.key === 'Tab') {
-			console.log(document.activeElement);
-		}
 	};
 </script>
 

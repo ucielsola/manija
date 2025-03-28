@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 
 	import { PinOff, Pin, Trash, Refresh } from '$lib/components/icons';
 
@@ -47,14 +47,14 @@
 </script>
 
 {#key refreshCount}
-	<Hoverable {onHoverChange}>
+	<Hoverable {onHoverChange} class='overflow-hidden'>
 		{#if isHovered}
 			<div
-				transition:fade
+				transition:fly={{ x: 0, y: -20 }}
 				class="absolute right-0 top-0 z-20 flex h-fit w-fit items-center justify-end "
 			>
 				<div class="bg-accent p-3 pt-1 gap-1 flex flex-col rounded-bl-lg">
-					<span class="text-sm font-bold">{source.name}</span>
+					<span class="text-sm font-bold text-secondary-content">{source.name}</span>
 					<div class="flex items-center justify-center gap-2 rounded-bl-lg">
 						<button class="btn btn-square btn-sm btn-secondary" onclick={handleRefresh} aria-label="Refresh">
 							<Refresh className="w-5 h-5" />

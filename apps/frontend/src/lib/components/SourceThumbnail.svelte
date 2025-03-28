@@ -43,9 +43,9 @@
 		</figure>
 
 		<div
-			class="bg-base-200/0 absolute top-0 left-0 flex h-full w-full flex-col justify-center gap-2 {hovered
+			class={`bg-base-200/0 absolute top-0 left-0 flex h-full w-full flex-col justify-center gap-2 ${hovered
 				? 'opacity-100'
-				: 'opacity-0'} transition-opacity"
+				: 'opacity-0'} transition-opacity duration-300`}
 		>
 			<div class="bg-primary absolute top-0 left-0 w-full rounded-t-md px-2">
 				<span class="text-primary-content text-sm font-semibold">{source.name}</span>
