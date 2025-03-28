@@ -7,6 +7,14 @@
 
 A modern web application for streaming content, built with cutting-edge technologies.
 
+## TODO
+- [x] Add dark mode
+- [ ] Add search functionality
+- [ ] Add localization
+- [ ] Implement retry logic for video loading
+- [ ] Add keyboard shortcuts
+- [ ] Capture user clipboard to find URLs
+
 ## Features
 
 - **Responsive Design** - Beautiful UI that works on all device sizes
