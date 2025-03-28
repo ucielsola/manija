@@ -18,8 +18,6 @@ export class App implements StorageProvider {
         }
 
         this.storage = new AppStorage();
-        this._showIntro = true;
-
         this._theme = this.storage.get<'light' | 'dark'>('theme') ?? 'light';
         this._columns = this.storage.get<number>('columns') ?? 1;
     }
@@ -72,6 +70,7 @@ export class App implements StorageProvider {
     set theme(value: 'light' | 'dark') {
         this._theme = value;
         this.storage!.set('theme', value);
+        document.cookie = `manija-tv-theme=${value}; path=/; max-age=31536000`;
     }
 
     get showIntro(): boolean {

@@ -13,7 +13,9 @@
 
 <div class="flex h-full w-full flex-col overflow-hidden">
 	{#if pinnedSources.length === 0}
-		<Guide />
+		<div class="h-full w-full" in:fade|global={{ delay: 600 }}>
+			<Guide />
+		</div>
 	{:else}
 		<div class="h-full overflow-hidden p-8 pt-0">
 			<div

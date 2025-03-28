@@ -54,7 +54,7 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="flex h-dvh w-dvw flex-col-reverse overflow-hidden" data-theme={app.theme}>
+<div class="flex h-dvh w-dvw flex-col-reverse overflow-hidden">
 	{#if app.showIntro}
 		<Intro />
 	{:else}
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 
-		<div in:fade>
+		<div in:fade={{delay: 400}}>
 			<TopBar />
 		</div>
 	{/if}
