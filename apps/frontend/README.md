@@ -12,8 +12,9 @@ A modern web application for streaming content, built with cutting-edge technolo
 - [ ] Add search functionality
 - [ ] Add localization
 - [ ] Implement retry logic for video loading
-- [ ] Add keyboard shortcuts
-- [ ] Capture user clipboard to find URLs
+- [x] Add keyboard shortcuts
+- [x] Request and check clipboard permissions
+- [x] Capture user clipboard to find URLs
 
 ## Features
 
