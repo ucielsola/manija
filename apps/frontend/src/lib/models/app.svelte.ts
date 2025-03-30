@@ -92,9 +92,25 @@ export class App implements StorageProvider {
             return;
         }
 
-        const permission = await navigator.permissions.query({ name: 'clipboard-read' })
-
-        this._hasClipboardAccess = permission?.state === 'granted';
+        try {
+            // Use 'as any' to bypass TypeScript's type checking for this specific call
+            const permission = await navigator.permissions.query({ name: 'clipboard-read' as any });
+            
+            this._hasClipboardAccess = permission?.state === 'granted';
+            
+            if (this._hasClipboardAccess) {
+                this._showIntro = false;
+            }
+            
+            permission.addEventListener('change', () => {
+                this._hasClipboardAccess = permission.state === 'granted';
+                if (this._hasClipboardAccess) {
+                    this._showIntro = false;
+                }
+            });
+        } catch (error) {
+            console.error("Error checking clipboard permission:", error);
+        }
     }
 
     toggleSidebar(): void {

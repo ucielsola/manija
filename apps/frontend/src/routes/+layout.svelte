@@ -21,18 +21,10 @@
 
 	let { children }: { children: Snippet } = $props();
 
-	const recursiveCheck = () => {
-		app.checkClipboardAccess();
-		if (!app.hasClipboardAccess) {
-			setTimeout(() => {
-				recursiveCheck();
-			}, 1000);
-		}
-	};
-
-	recursiveCheck();
 
 	$effect(() => {
+	app.checkClipboardAccess();
+
 		injectVercelAnalytics();
 		setTimeout(() => {
 			app.initStorage();
@@ -49,7 +41,7 @@
 		}
 	};
 
-	$inspect(app.showIntro)
+	$inspect(app.showIntro);
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
@@ -58,7 +50,7 @@
 	{#if app.showIntro}
 		<Intro />
 	{:else}
-		<div class="flex grow overflow-hidden" in:fade={{delay: 400}}>
+		<div class="flex grow overflow-hidden" in:fade={{ delay: 400 }}>
 			<div class="relative flex h-full w-full grow overflow-hidden" in:fade>
 				<SideBarToggle />
 				<SideBar />
@@ -68,7 +60,7 @@
 			</div>
 		</div>
 
-		<div in:fade={{delay: 400}}>
+		<div in:fade={{ delay: 400 }}>
 			<TopBar />
 		</div>
 	{/if}
