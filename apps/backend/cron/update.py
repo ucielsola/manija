@@ -31,6 +31,8 @@ for (handle,) in rows:
 
     if result.returncode != 0:
         print(f"⚠️ yt-dlp falló para {handle}")
+        print("stderr:", result.stderr)
+        print("stdout:", result.stdout)
         continue
 
     try:
