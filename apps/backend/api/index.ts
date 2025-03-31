@@ -5,7 +5,7 @@ import live from "./routes/live";
 const app = new Hono();
 
 app.use("*", cors({
-    origin: "https://manija.ucielsola.dev/",
+    origin: "https://manija.ucielsola.dev",
 }));  
 
 app.route("/live", live);

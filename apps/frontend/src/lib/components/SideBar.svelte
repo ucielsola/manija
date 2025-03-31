@@ -13,7 +13,7 @@
 	});
 
 	const test = async () => {
-		const testi = await fetch('https://manija-production.up.railway.app/live');
+		const testi = await fetch('https://manija-sources.up.railway.app/live');
 		const data = await testi.json();
 		console.log(data);
 	};
