@@ -6,11 +6,17 @@
 	let isCollapsed = $derived(app.sideBarCollapsed);
 	let translate = $derived(isCollapsed ? 'translate-x-[-100%]' : 'translate-x-0');
 	let width = $derived(isCollapsed ? 'w-0' : 'w-64');
-	let addVideoButton: HTMLButtonElement
+	let addVideoButton: HTMLButtonElement;
 
 	$effect(() => {
-		addVideoButton?.focus()
-	})
+		addVideoButton?.focus();
+	});
+
+	const test = async () => {
+		const testi = await fetch('https://manija-production.up.railway.app/live');
+		const data = await testi.json();
+		console.log(data);
+	};
 </script>
 
 <div
@@ -30,9 +36,18 @@
 				Agregar Video
 			</button>
 
+			<button
+				onclick={test}
+				class="btn btn-outline btn-wide btn-sm btn-primary mt-8"
+				aria-label="Add Video"
+			>
+				<Plus className="w-4 h-4" />
+				Test
+			</button>
+
 			<div class="flex w-full grow flex-col gap-3 overflow-y-auto pb-3">
 				{#each sourceList.sources as source, i (source.id)}
-				<SourceThumbnail {source} />
+					<SourceThumbnail {source} />
 				{:else}
 					<div class="flex items-center justify-center rounded-md border border-dashed p-6">
 						<span class="text-primary-foreground text-xs font-semibold">
@@ -45,7 +60,7 @@
 	</div>
 
 	<div
-		class={`flex h-8 w-full items-center justify-between gap-2 overflow-hidden border-t border-r p-2 transition-transform duration-200 ${translate}`}
+		class={`flex h-8 w-full items-center justify-between gap-2 overflow-hidden border-r border-t p-2 transition-transform duration-200 ${translate}`}
 	>
 		<span class="text-xs">
 			🧠 By <a
