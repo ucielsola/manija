@@ -8,17 +8,21 @@ def scrape_channel(url):
         text=True
     )
 
+    # Delete channels that are not live
     if result.returncode != 0:
-        return None, result.stderr.strip()
+        if "not currently live" in result.stderr.lower():
+            return None, "No hay transmisión activa"
+        else:
+            return None, result.stderr.strip()
 
     try:
         data = json.loads(result.stdout)
+
         return {
-            "channel_id": data["channel_id"],
             "video_id": data["id"],
             "video_title": data["title"],
             "video_url": f"https://www.youtube.com/watch?v={data['id']}"
         }, None
 
     except Exception as e:
-        return None, str(e)
+        return None, f"Error de parseo JSON: {e}"

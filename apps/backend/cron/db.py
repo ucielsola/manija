@@ -20,20 +20,26 @@ def get_handles(conn):
     cur.close()
     return [handle for (handle,) in rows]
 
-def save_video(conn, video):
+def save_video(conn, handle, video):
     cur = conn.cursor()
     cur.execute("""
-        INSERT INTO live_videos (channel_id, video_id, video_title, video_url)
+        INSERT INTO live_videos (handle, video_id, video_title, video_url)
         VALUES (%s, %s, %s, %s)
-        ON CONFLICT (channel_id) DO UPDATE
+        ON CONFLICT (handle) DO UPDATE
         SET video_id = EXCLUDED.video_id,
             video_title = EXCLUDED.video_title,
             video_url = EXCLUDED.video_url
     """, (
-        video["channel_id"],
+        handle,
         video["video_id"],
         video["video_title"],
         video["video_url"]
     ))
+    conn.commit()
+    cur.close()
+
+def delete_video(conn, handle):
+    cur = conn.cursor()
+    cur.execute("DELETE FROM live_videos WHERE handle = %s", (handle,))
     conn.commit()
     cur.close()

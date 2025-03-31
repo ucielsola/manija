@@ -15,7 +15,7 @@ def main():
             continue
 
         if video:
-            save_video(conn, video)
+            save_video(conn, handle, video)
             print("✅ Guardado:", video['video_title'])
 
     conn.close()

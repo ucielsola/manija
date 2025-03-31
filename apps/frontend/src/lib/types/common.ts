@@ -15,7 +15,7 @@ export enum YouTubePlayerState {
 }
 
 export type LiveSource = {
-    channel_id: string;
+    handle: string;
     video_id: string;
     video_title: string;
     video_url: string;
