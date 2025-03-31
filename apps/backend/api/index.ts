@@ -6,6 +6,7 @@ const app = new Hono();
 
 app.use("*", cors({
     origin: "https://manija.ucielsola.dev",
+    // origin: "*",
 }));  
 
 app.route("/live", live);

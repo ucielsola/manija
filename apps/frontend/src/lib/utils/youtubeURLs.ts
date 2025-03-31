@@ -1,4 +1,5 @@
 import { SourcNameMaxLength } from "$lib/consts";
+import { sliceString } from "./sliceString";
 
 const extractURLId = (url: string) => {
 	let urlId: string = '';
@@ -36,7 +37,7 @@ const getVideoName = async (url: string): Promise<string> => {
 	const data = await response.json();
 	const name = data?.title || '';
 
-	return name.slice(0, SourcNameMaxLength) + (name.length > SourcNameMaxLength ? '...' : '');
+	return sliceString(name, SourcNameMaxLength);
 }
 
 export const youtubeURLs = {

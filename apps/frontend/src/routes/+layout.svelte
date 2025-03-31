@@ -16,14 +16,25 @@
 	import AddSourceDialog from '$lib/components/AddSourceDialog.svelte';
 	import ConfirmDeleteAllDialog from '$lib/components/ConfirmDeleteAllDialog.svelte';
 	import RenameSourceDialog from '$lib/components/RenameSourceDialog.svelte';
+	import { SourcNameMaxLength } from '$lib/consts';
+	import { sliceString } from '$lib/utils/sliceString';
 
 	import type { Snippet } from 'svelte';
+	import type { LayoutServerData } from './$types';
 
-	let { children }: { children: Snippet } = $props();
+	let { children, data }: { children: Snippet; data: LayoutServerData } = $props();
 
+	if (data.liveSources && data.liveSources.length > 0) {
+		data.liveSources.forEach((source) => {
+			sourceList.addSource({
+				name: sliceString(source.video_title, SourcNameMaxLength),
+				url: source.video_url
+			});
+		});
+	}
 
 	$effect(() => {
-	app.checkClipboardAccess();
+		app.checkClipboardAccess();
 
 		injectVercelAnalytics();
 		setTimeout(() => {

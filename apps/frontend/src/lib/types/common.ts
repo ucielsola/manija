@@ -13,3 +13,10 @@ export enum YouTubePlayerState {
     BUFFERING = 3,
     CUED = 5
 }
+
+export type LiveSource = {
+    channel_id: string;
+    video_id: string;
+    video_title: string;
+    video_url: string;
+}

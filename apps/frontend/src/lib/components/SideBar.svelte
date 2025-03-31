@@ -11,12 +11,6 @@
 	$effect(() => {
 		addVideoButton?.focus();
 	});
-
-	const test = async () => {
-		const testi = await fetch('https://manija-sources.up.railway.app/live');
-		const data = await testi.json();
-		console.log(data);
-	};
 </script>
 
 <div
@@ -34,15 +28,6 @@
 			>
 				<Plus className="w-4 h-4" />
 				Agregar Video
-			</button>
-
-			<button
-				onclick={test}
-				class="btn btn-outline btn-wide btn-sm btn-primary mt-8"
-				aria-label="Add Video"
-			>
-				<Plus className="w-4 h-4" />
-				Test
 			</button>
 
 			<div class="flex w-full grow flex-col gap-3 overflow-y-auto pb-3">
