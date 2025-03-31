@@ -3,7 +3,7 @@ import json
 
 def scrape_channel(url):
     result = subprocess.run(
-        ["yt-dlp", "-j", url],
+        ["/opt/homebrew/bin/yt-dlp", "-j", url],
         capture_output=True,
         text=True
     )
