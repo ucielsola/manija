@@ -1,3 +1,26 @@
+from datetime import datetime
+from db import get_connection, get_handles, save_video, delete_video
+from yt_scraper import scrape_channel
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def process_handle(conn, handle):
+    url = f"https://www.youtube.com/{handle}/live"
+    video, error = scrape_channel(url)
+
+    if error:
+        if "not currently live" in error.lower() or "no hay transmisión" in error.lower():
+            delete_video(conn, handle)
+            return (handle, "deleted")
+        else:
+            return (handle, f"error: {error}")
+
+    if video:
+        save_video(conn, handle, video)
+        return (handle, "saved")
+
+    return (handle, "skipped")
+
+
 def main():
     start_time = datetime.now()
     conn = get_connection()
