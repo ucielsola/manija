@@ -3,6 +3,8 @@
 	import { Plus, Github, LinkedIn } from '$lib/components/icons';
 	import SourceThumbnail from '$lib/components/SourceThumbnail.svelte';
 
+	let search = $state('');
+	let filteredSources = $derived(sourceList.sources.filter(source => source.name.toLowerCase().includes(search.toLowerCase())));
 	let isCollapsed = $derived(app.sideBarCollapsed);
 	let translate = $derived(isCollapsed ? 'translate-x-[-100%]' : 'translate-x-0');
 	let width = $derived(isCollapsed ? 'w-0' : 'w-64');
@@ -30,8 +32,13 @@
 				Agregar Video
 			</button>
 
+			<label class="input input-primary">
+				<svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></g></svg>
+				<input type="search" class="grow" placeholder="Search" bind:value={search} />
+			  </label>
+
 			<div class="flex w-full grow flex-col gap-3 overflow-y-auto pb-3">
-				{#each sourceList.sources as source, i (source.id)}
+				{#each filteredSources as source, i (source.id)}
 					<SourceThumbnail {source} />
 				{:else}
 					<div class="flex items-center justify-center rounded-md border border-dashed p-6">
