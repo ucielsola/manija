@@ -3,7 +3,7 @@
 	import { app } from '$lib/stores';
 
 	const handleNo = () => {
-		app.showIntro = true;
+		app.showIntro = false;
 	};
 
 	const handleYes = () => {
