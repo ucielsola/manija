@@ -11,7 +11,13 @@
 	};
 
 	$effect(() => {
-		app.checkClipboardAccess();
+		const ua = navigator.userAgent;
+
+		if (ua.includes('Chrome')) {
+			app.checkClipboardAccess();
+		} else {
+			handleNo();
+		}
 	});
 </script>
 
