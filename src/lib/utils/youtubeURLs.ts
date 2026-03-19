@@ -35,7 +35,7 @@ const makeEmbedURL = (url: string): string | null => {
 
 	const params = new URLSearchParams({
 		enablejsapi: '1',
-		controls: '0',
+		controls: '1',
 		modestbranding: '1',
 		rel: '0',
 		autoplay: '0'
