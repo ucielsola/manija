@@ -60,7 +60,17 @@ export class SourceList {
 		this.checkStorage();
 		if (!name || !url) return;
 
+		if (!youtubeURLs.isValidYouTubeUrl(url)) {
+			console.error('URL de YouTube inválida:', url);
+			return;
+		}
+
 		const id = youtubeURLs.extractURLId(url);
+
+		if (!id) {
+			console.error('No se pudo extraer ID de la URL:', url);
+			return;
+		}
 
 		const existingSource = this._sources.find((source) => source.id === id);
 
@@ -92,7 +102,6 @@ export class SourceList {
 
 	deleteSource(source: Source, onSuccess?: () => void): void {
 		this.checkStorage();
-		console.log('deleteSource llamado con source:', source.name);
 
 		if (!this._sources?.length) {
 			console.error('No se puede eliminar: array de fuentes está vacío');

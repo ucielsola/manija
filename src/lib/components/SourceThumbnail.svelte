@@ -33,14 +33,22 @@
 
 <Hoverable onHoverChange={handleHover}>
 	<div class="border-primary relative aspect-video w-full rounded-md border">
-		<figure class="border-primary relative h-full w-full overflow-hidden rounded-md">
-			<img
-				src={source.thumbnail}
-				alt={source.name}
-				class={`border-primary h-full w-full scale-105 rounded-md ${loaded ? 'opacity-100' : 'opacity-0'}`}
-				onload={() => (loaded = true)}
-			/>
-		</figure>
+	<figure class="border-primary relative h-full w-full overflow-hidden rounded-md">
+		<img
+			src={source.thumbnail}
+			alt={source.name}
+			class={`border-primary h-full w-full scale-105 rounded-md ${loaded ? 'opacity-100' : 'opacity-0'}`}
+			onload={() => (loaded = true)}
+			onerror={(e) => {
+				const img = e.target as HTMLImageElement;
+				if (img.src.includes('maxresdefault')) {
+					img.src = img.src.replace('maxresdefault', 'hqdefault');
+				} else if (img.src.includes('hqdefault')) {
+					img.src = img.src.replace('hqdefault', 'mqdefault');
+				}
+			}}
+		/>
+	</figure>
 
 		<div
 			class={`bg-base-200/0 absolute top-0 left-0 flex h-full w-full flex-col justify-center gap-2 ${hovered

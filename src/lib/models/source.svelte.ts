@@ -18,12 +18,10 @@ export class Source {
 	private _controller?: SourceController;
 
 	constructor({ url, name, pinned = false }: SourceData) {
-		console.log('Constructor de Source llamado con:', { url, name, pinned });
 		this._name = name;
 		this._url = url;
-		this._embedUrl = youtubeURLs.makeEmbedURL(url);
-		this._id = youtubeURLs.extractURLId(url);
-		console.log('id de Source extraído:', this._id);
+		this._embedUrl = youtubeURLs.makeEmbedURL(url) || '';
+		this._id = youtubeURLs.extractURLId(url) || '';
 		this._thumbnail = youtubeURLs.thumbnailURL(this._id);
 		this._pinned = pinned;
 	}
