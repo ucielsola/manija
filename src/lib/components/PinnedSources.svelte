@@ -12,7 +12,11 @@
 </script>
 
 <div class="flex h-full w-full flex-col overflow-hidden">
-	{#if pinnedSources.length === 0}
+	{#if sourceList.loading}
+		<div class="h-full w-full flex items-center justify-center">
+			<span class="loading loading-spinner loading-lg text-primary"></span>
+		</div>
+	{:else if pinnedSources.length === 0}
 		<div class="h-full w-full" in:fade|global={{ delay: 600 }}>
 			<Guide />
 		</div>

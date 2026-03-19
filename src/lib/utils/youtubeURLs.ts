@@ -2,6 +2,7 @@ import { SourcNameMaxLength } from '$lib/consts';
 import { sliceString } from './sliceString';
 
 const extractURLId = (url: string) => {
+	console.log('extractURLId llamado con url:', url);
 	let urlId: string = '';
 	if (url.includes('watch?v=')) {
 		const urlParts = url.split('watch?v=');
@@ -9,8 +10,11 @@ const extractURLId = (url: string) => {
 	} else if (url.includes('embed')) {
 		const urlParts = url.split('embed/');
 		urlId = urlParts[1];
+	} else {
+		console.error('Formato de URL de YouTube inválido, se esperaba watch?v= o embed:', url);
 	}
 
+	console.log('extractURLId retornando:', urlId);
 	return urlId;
 };
 
@@ -42,7 +46,7 @@ const getVideoName = async (url: string): Promise<string> => {
 
 		return sliceString(name, SourcNameMaxLength);
 	} catch (error) {
-		console.error('Error fetching video name:', error);
+		console.error('Error al obtener nombre del video:', error);
 		return '';
 	}
 };

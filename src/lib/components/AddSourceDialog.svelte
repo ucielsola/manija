@@ -43,7 +43,7 @@
 				name = await youtubeURLs.getVideoName(url);
 			}
 		} catch (error) {
-			console.error('Error opening dialog:', error);
+			console.error('Error al abrir diálogo:', error);
 		} finally {
 			loading = false;
 		}

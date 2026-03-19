@@ -1,103 +1,137 @@
-import { AppStorage } from "$lib/models/appStorage";
-import { Source, type SourceData } from "$lib/models/source.svelte";
-import { youtubeURLs } from "$lib/utils/youtubeURLs";
+import { AppStorage } from '$lib/models/appStorage';
+import { Source, type SourceData } from '$lib/models/source.svelte';
+import { youtubeURLs } from '$lib/utils/youtubeURLs';
 
 export class SourceList {
-    private _storage?: AppStorage;
-    private _sources = $state<Source[]>([]);
-    private _pinned = $derived<Source[]>(this._sources.filter((source) => source.pinned));
-    private _muted = $derived<Source[]>(this._sources.filter((source) => source.muted));
-    private _allMuted = $derived<boolean>(this._muted.length === this._sources.length);
+	private _storage?: AppStorage;
+	private _sources = $state<Source[]>([]);
+	private _pinned = $derived<Source[]>(this._sources.filter((source) => source.pinned));
+	private _muted = $derived<Source[]>(this._sources.filter((source) => source.muted));
+	private _allMuted = $derived<boolean>(this._muted.length === this._sources.length);
+	private _loading = $state<boolean>(false);
 
-    initStorage(): void {
-        if (this._storage) {
-            console.warn("Storage is already initialized.");
-            return;
-        }
+	async initStorage(): Promise<void> {
+		if (this._storage) {
+			console.warn('Storage ya está inicializado.');
+			return;
+		}
 
-        this._storage = new AppStorage();
-        this._sources = (this._storage.get<SourceData[]>('sources') ?? []).map(sd => new Source(sd));
-    }
+		this._loading = true;
 
-    get sources(): Source[] {
-        return this._sources.toReversed()
-    }
+		await new Promise((resolve) => setTimeout(resolve, 0));
 
-    get pinned(): Source[] {
-        return this._pinned.toReversed()
-    }
+		this._storage = new AppStorage();
+		this._sources = (this._storage.get<SourceData[]>('sources') ?? []).map((sd) => new Source(sd));
 
-    get allMuted(): boolean {
-        return this._allMuted;
-    }
+		this._loading = false;
+	}
 
-    toggleSourcePin(id: string): void {
-        this.checkStorage();
-        if (!id || !this._sources?.length) return;
+	get sources(): Source[] {
+		return this._sources.toReversed();
+	}
 
-        const source = this._sources.find((source) => source.id === id);
-        if (!source) return;
+	get pinned(): Source[] {
+		return this._pinned.toReversed();
+	}
 
-        source.pinned = !source.pinned;
-        this._storage!.set('sources', this._sources.map(s => s.data));
-    }
+	get allMuted(): boolean {
+		return this._allMuted;
+	}
 
-    addSource({name, url}: {name: string, url: string}): void {
-        this.checkStorage();
-        if (!name || !url) return;
+	get loading(): boolean {
+		return this._loading;
+	}
 
-        const id = youtubeURLs.extractURLId(url);
+	toggleSourcePin(id: string): void {
+		this.checkStorage();
+		if (!id || !this._sources?.length) return;
 
-        const existingSource = this._sources.find((source) => source.id === id);
-        
-        if (existingSource) return;
+		const source = this._sources.find((source) => source.id === id);
+		if (!source) return;
 
-        const newSource = new Source({url, name, pinned: false});
-        
-        this._sources.push(newSource);
+		source.pinned = !source.pinned;
+		this._storage!.set(
+			'sources',
+			this._sources.map((s) => s.data)
+		);
+	}
 
-        this._storage!.set('sources', this._sources.map(s => s.data)); 
-    }
+	addSource({ name, url }: { name: string; url: string }): void {
+		this.checkStorage();
+		if (!name || !url) return;
 
-    renameSource(id: string, name: string): void {
-        this.checkStorage();
-        if (!id || !this._sources?.length) return;
+		const id = youtubeURLs.extractURLId(url);
 
-        const source = this._sources.find((source) => source.id === id);
-        if (!source) return;
+		const existingSource = this._sources.find((source) => source.id === id);
 
-        source.name = name;
-        this._storage!.set('sources', this._sources.map(s => s.data));
-    }
+		if (existingSource) return;
 
-    deleteSource(id: string, onSuccess?: () => void): void {
-        this.checkStorage();
-        if (!id || !this._sources?.length) return;
+		const newSource = new Source({ url, name, pinned: false });
 
-        this._sources = this._sources.filter((source) => source.id !== id);
-        this._storage!.set('sources', this._sources.map(s => s.data));
-        onSuccess?.();
-    }
+		this._sources.push(newSource);
 
-    muteAll(): void {
-        this._sources.forEach((source) => source.setMute(true));
-    }
+		this._storage!.set(
+			'sources',
+			this._sources.map((s) => s.data)
+		);
+	}
 
-    deleteAllSources(): void {
-        this.checkStorage();
-        this._sources = [];
-        this._storage!.set('sources', []);
-    }
+	renameSource(id: string, name: string): void {
+		this.checkStorage();
+		if (!id || !this._sources?.length) return;
 
-    reset(): void {
-        this.checkStorage();
-        this._sources = [];
-        this._storage!.set('sources', []);
-    }
+		const source = this._sources.find((source) => source.id === id);
+		if (!source) return;
 
-    private checkStorage(): void {
-        if (!this._storage) {
-            this.initStorage();
-        }
-    }
+		source.name = name;
+		this._storage!.set(
+			'sources',
+			this._sources.map((s) => s.data)
+		);
+	}
+
+	deleteSource(source: Source, onSuccess?: () => void): void {
+		this.checkStorage();
+		console.log('deleteSource llamado con source:', source.name);
+
+		if (!this._sources?.length) {
+			console.error('No se puede eliminar: array de fuentes está vacío');
+			return;
+		}
+
+		const sourceIndex = this._sources.indexOf(source);
+		if (sourceIndex === -1) {
+			console.error('No se puede eliminar: fuente no encontrada');
+			return;
+		}
+
+		this._sources = this._sources.filter((s) => s !== source);
+		this._storage!.set(
+			'sources',
+			this._sources.map((s) => s.data)
+		);
+		onSuccess?.();
+	}
+
+	muteAll(): void {
+		this._sources.forEach((source) => source.setMute(true));
+	}
+
+	deleteAllSources(): void {
+		this.checkStorage();
+		this._sources = [];
+		this._storage!.set('sources', []);
+	}
+
+	reset(): void {
+		this.checkStorage();
+		this._sources = [];
+		this._storage!.set('sources', []);
+	}
+
+	private checkStorage(): void {
+		if (!this._storage) {
+			this.initStorage();
+		}
+	}
 }

@@ -33,7 +33,7 @@
 	};
 
 	const handleDelete = () => {
-		sourceList.deleteSource(source.id, () => {
+		sourceList.deleteSource(source, () => {
 			toastStore.addToast({
 				text: 'Video eliminado',
 				type: 'primary'

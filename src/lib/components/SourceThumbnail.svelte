@@ -18,7 +18,7 @@
 	};
 
 	const handleDelete = () => {
-		sourceList.deleteSource(source.id, () => {
+		sourceList.deleteSource(source, () => {
 			toastStore.addToast({
 				text: 'Video eliminado',
 				type: 'primary'
@@ -67,7 +67,7 @@
 				<button
 					class="btn btn-square btn-sm btn-primary"
 					onclick={handleRename}
-					aria-label="Delete"
+					aria-label="Rename"
 				>
 					<Pencil className="w-5 h-5" />
 				</button>

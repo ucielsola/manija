@@ -1,136 +1,135 @@
-import { AppStorage, type StorageProvider } from "$lib/models/appStorage";
+import { AppStorage, type StorageProvider } from '$lib/models/appStorage';
 
 export class App implements StorageProvider {
-    storage?: AppStorage;
-    private _showIntro = $state<boolean>(true);
-    private _theme = $state<'light' | 'dark'>('light');
-    private _columns = $state<number>(1);
-    private _sideBarCollapsed = $state<boolean>(true);
-    private _showAddSource = $state<boolean>(false);
-    private _showDeleteAll = $state<boolean>(false);
-    private _renamingSourceId = $state<string | null>(null);
-    private _hasClipboardAccess = $state<boolean>(false);
+	storage?: AppStorage;
+	private _showIntro = $state<boolean>(true);
+	private _theme = $state<'light' | 'dark'>('light');
+	private _columns = $state<number>(1);
+	private _sideBarCollapsed = $state<boolean>(true);
+	private _showAddSource = $state<boolean>(false);
+	private _showDeleteAll = $state<boolean>(false);
+	private _renamingSourceId = $state<string | null>(null);
+	private _hasClipboardAccess = $state<boolean>(false);
 
-    public initStorage(): void {
-        if (this.storage) {
-            console.warn("Storage is already initialized.");
-            return;
-        }
+	public initStorage(): void {
+		if (this.storage) {
+			console.warn('Storage is already initialized.');
+			return;
+		}
 
-        this.storage = new AppStorage();
-        this._theme = this.storage.get<'light' | 'dark'>('theme') ?? 'light';
-        this._columns = this.storage.get<number>('columns') ?? 1;
-    }
+		this.storage = new AppStorage();
+		this._theme = this.storage.get<'light' | 'dark'>('theme') ?? 'light';
+		this._columns = this.storage.get<number>('columns') ?? 1;
+	}
 
-    get hasClipboardAccess(): boolean {
-        return this._hasClipboardAccess;
-    }
+	get hasClipboardAccess(): boolean {
+		return this._hasClipboardAccess;
+	}
 
-    get showAddSource(): boolean {
-        return this._showAddSource;
-    }
+	get showAddSource(): boolean {
+		return this._showAddSource;
+	}
 
-    set showAddSource(value: boolean) {
-        this._showAddSource = value;
-    }
+	set showAddSource(value: boolean) {
+		this._showAddSource = value;
+	}
 
-    get showDeleteAll(): boolean {
-        return this._showDeleteAll;
-    }
+	get showDeleteAll(): boolean {
+		return this._showDeleteAll;
+	}
 
-    set showDeleteAll(value: boolean) {
-        this._showDeleteAll = value;
-    }
+	set showDeleteAll(value: boolean) {
+		this._showDeleteAll = value;
+	}
 
-    get columns(): number {
-        return this._columns;
-    }
+	get columns(): number {
+		return this._columns;
+	}
 
-    get renamingSourceId(): string | null {
-        return this._renamingSourceId;
-    }
+	get renamingSourceId(): string | null {
+		return this._renamingSourceId;
+	}
 
-    set renamingSourceId(value: string | null) {
-        this._renamingSourceId = value;
-    }
+	set renamingSourceId(value: string | null) {
+		this._renamingSourceId = value;
+	}
 
-    set columns(value: number) {
-        this._columns = value;
-        this.storage!.set('columns', value);
-    }
+	set columns(value: number) {
+		this._columns = value;
+		this.storage!.set('columns', value);
+	}
 
-    get sideBarCollapsed(): boolean {
-        return this._sideBarCollapsed;
-    }
+	get sideBarCollapsed(): boolean {
+		return this._sideBarCollapsed;
+	}
 
-    get theme(): 'light' | 'dark' {
-        return this._theme;
-    }
+	get theme(): 'light' | 'dark' {
+		return this._theme;
+	}
 
-    set theme(value: 'light' | 'dark') {
-        this._theme = value;
-        this.storage!.set('theme', value);
-        document.cookie = `manija-tv-theme=${value}; path=/; max-age=31536000`;
-    }
+	set theme(value: 'light' | 'dark') {
+		this._theme = value;
+		this.storage!.set('theme', value);
+		document.cookie = `manija-tv-theme=${value}; path=/; max-age=31536000`;
+	}
 
-    get showIntro(): boolean {
-        return this._showIntro;
-    }
+	get showIntro(): boolean {
+		return this._showIntro;
+	}
 
-    set showIntro(show: boolean) {
-        this._showIntro = show
-    }
+	set showIntro(show: boolean) {
+		this._showIntro = show;
+	}
 
-    async checkClipboardAccess() {
-        if (this._hasClipboardAccess) {
-            this._showIntro = false;
-            return;
-        }
+	async checkClipboardAccess() {
+		if (this._hasClipboardAccess) {
+			this._showIntro = false;
+			return;
+		}
 
-        if (typeof navigator === 'undefined') {
-            console.error("NO NAVI!")
-            return;
-        }
+		if (typeof navigator === 'undefined') {
+			console.error('NO NAVI!');
+			return;
+		}
 
-        try {
-            // Use 'as any' to bypass TypeScript's type checking for this specific call
-            const permission = await navigator.permissions.query({ name: 'clipboard-read' as any });
-            
-            this._hasClipboardAccess = permission?.state === 'granted';
-            
-            if (this._hasClipboardAccess) {
-                this._showIntro = false;
-            }
-            
-            permission.addEventListener('change', () => {
-                this._hasClipboardAccess = permission.state === 'granted';
-                if (this._hasClipboardAccess) {
-                    this._showIntro = false;
-                }
-            });
-        } catch (error) {
-            console.error("Error checking clipboard permission:", error);
-        }
-    }
+		try {
+			// Use 'as any' to bypass TypeScript's type checking for this specific call
+			const permission = await navigator.permissions.query({ name: 'clipboard-read' as any });
 
-    toggleSidebar(): void {
-        this._sideBarCollapsed = !this._sideBarCollapsed;
-    }
+			this._hasClipboardAccess = permission?.state === 'granted';
 
-    checkStorage(): void {
-        if (!this.storage) {
-            throw new Error("Storage has not been initialized. Call initStorage() first.");
-        }
-    }
+			if (this._hasClipboardAccess) {
+				this._showIntro = false;
+			}
 
-    dismissOpenDialogs(): void {
-        if (!this._showAddSource && !this._showDeleteAll && !this._renamingSourceId) {
-            this.toggleSidebar();
-        } else {
-            this._showAddSource = false;
-            this._showDeleteAll = false;
-            this._renamingSourceId = null;
-        }
+			permission.addEventListener('change', () => {
+				this._hasClipboardAccess = permission.state === 'granted';
+				if (this._hasClipboardAccess) {
+					this._showIntro = false;
+				}
+			});
+		} catch (error) {
+			console.error('Error al verificar permiso del portapapeles:', error);
+		}
+	}
 
-    }
+	toggleSidebar(): void {
+		this._sideBarCollapsed = !this._sideBarCollapsed;
+	}
+
+	checkStorage(): void {
+		if (!this.storage) {
+			throw new Error('Storage has not been initialized. Call initStorage() first.');
+		}
+	}
+
+	dismissOpenDialogs(): void {
+		if (!this._showAddSource && !this._showDeleteAll && !this._renamingSourceId) {
+			this.toggleSidebar();
+		} else {
+			this._showAddSource = false;
+			this._showDeleteAll = false;
+			this._renamingSourceId = null;
+		}
+	}
 }

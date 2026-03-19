@@ -10,7 +10,7 @@
 		try {
 			await navigator.clipboard.read();
 		} catch (error) {
-			console.error('Clipboard access denied:', error);
+			console.error('Acceso al portapapeles denegado:', error);
 			handleNo();
 		}
 	};

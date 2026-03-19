@@ -31,21 +31,30 @@
 	  </label>
 
 	<div class="flex w-full grow flex-col gap-3 overflow-y-auto pb-3">
-		{#each filteredSources as source, i (source.id)}
-			<SourceThumbnail {source} />
-		{:else}
+		{#if sourceList.loading}
 			<div class="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-base-content/20 bg-base-200/30 p-6">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-base-content/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M6 3 3 6" />
-					<path d="M18 3 21 6" />
-					<path d="M6 21 3 18" />
-					<path d="M18 21 21 18" />
-				</svg>
+				<span class="loading loading-spinner loading-md text-primary"></span>
 				<span class="text-base-content/60 text-xs font-semibold">
-					Todavía no agregaste videos
+					Cargando videos...
 				</span>
 			</div>
-		{/each}
+		{:else}
+			{#each filteredSources as source, i (source.id || i)}
+				<SourceThumbnail {source} />
+			{:else}
+				<div class="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-base-content/20 bg-base-200/30 p-6">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-base-content/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M6 3 3 6" />
+						<path d="M18 3 21 6" />
+						<path d="M6 21 3 18" />
+						<path d="M18 21 21 18" />
+					</svg>
+					<span class="text-base-content/60 text-xs font-semibold">
+						Todavía no agregaste videos
+					</span>
+				</div>
+			{/each}
+		{/if}
 	</div>
 
 	<div class="flex h-8 w-full items-center justify-between gap-2 overflow-hidden border-r border-t p-2">
