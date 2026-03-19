@@ -37,7 +37,7 @@
 	"packageManager": "pnpm@10.30.3",
 	"dependencies": {
 		"@vercel/analytics": "^1.5.0",
-		"daisyui": "^5.0.6",
+		"daisyui": "^5.5.19",
 		"youtube-iframe-ctrl": "^1.0.3",
 		"zod": "^3.24.2"
 	}

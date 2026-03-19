@@ -8,7 +8,7 @@
 
 <div class="navbar  bg-base-100 shadow-sm border-b px-4">
 	<div class="flex-1">
-		<div class="text-primary-foreground flex items-center gap-4">
+		<div class="text-primary-content flex items-center gap-4">
 			<div class="h-12 w-12 text-primary">
 				<Tv />
 			</div>
@@ -16,7 +16,7 @@
 				<h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-primary">
 					Manija TV
 				</h1>
-				<span class="text-xs font-medium">
+				<span class="text-base-content text-xs font-medium">
 					Agregá todos los videos de
 					<a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"> YouTube </a>
 					que quieras para verlos en simultáneo.

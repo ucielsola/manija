@@ -1,5 +1,5 @@
-import { SourcNameMaxLength } from "$lib/consts";
-import { sliceString } from "./sliceString";
+import { SourcNameMaxLength } from '$lib/consts';
+import { sliceString } from './sliceString';
 
 const extractURLId = (url: string) => {
 	let urlId: string = '';
@@ -19,7 +19,7 @@ const makeEmbedURL = (url: string) => {
 
 	if (!url.includes('embed')) {
 		const urlParts = url.split('watch?v=');
-		newUrl = urlParts[0] + 'embed/' + urlParts[1] + `?enablejsapi=1`
+		newUrl = urlParts[0] + 'embed/' + urlParts[1] + `?enablejsapi=1`;
 
 		return newUrl;
 	} else {
@@ -29,16 +29,23 @@ const makeEmbedURL = (url: string) => {
 
 const thumbnailURL = (id: string) => {
 	return `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
-}
+};
 
 const getVideoName = async (url: string): Promise<string> => {
-	const urlId = extractURLId(url);
-	const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${urlId}`)
-	const data = await response.json();
-	const name = data?.title || '';
+	try {
+		const urlId = extractURLId(url);
+		const response = await fetch(
+			`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${urlId}`
+		);
+		const data = await response.json();
+		const name = data?.title || '';
 
-	return sliceString(name, SourcNameMaxLength);
-}
+		return sliceString(name, SourcNameMaxLength);
+	} catch (error) {
+		console.error('Error fetching video name:', error);
+		return '';
+	}
+};
 
 export const youtubeURLs = {
 	extractURLId,

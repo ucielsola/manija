@@ -6,8 +6,13 @@
 		app.showIntro = false;
 	};
 
-	const handleYes = () => {
-		navigator.clipboard.read();
+	const handleYes = async () => {
+		try {
+			await navigator.clipboard.read();
+		} catch (error) {
+			console.error('Clipboard access denied:', error);
+			handleNo();
+		}
 	};
 
 	$effect(() => {
@@ -26,9 +31,9 @@
 
 	{#if !app.hasClipboardAccess}
 		<div class="flex flex-col gap-2 text-center">
-			<span class="text-primary-foreground text-2xl font-semibold">¡Bienvenido a Manija TV!</span>
+			<span class="text-base-content text-2xl font-semibold">¡Bienvenido a Manija TV!</span>
 
-			<div class="text-primary-foreground flex flex-col gap-2">
+			<div class="text-base-content flex flex-col gap-2">
 				<span> Con tu permiso, puedo leer lo que copiaste y ayudarte a arrancar más rápido. </span>
 				<span>
 					Por ejemplo, si copiaste una URL de YouTube, puedo detectarla y traer el nombre del video

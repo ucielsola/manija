@@ -9,7 +9,7 @@ dependencies:
     specifier: ^1.5.0
     version: 1.6.1(@sveltejs/kit@2.55.0)(svelte@5.54.0)
   daisyui:
-    specifier: ^5.0.6
+    specifier: ^5.5.19
     version: 5.5.19
   youtube-iframe-ctrl:
     specifier: ^1.0.3

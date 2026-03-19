@@ -12,7 +12,6 @@
 	import { app, sourceList } from '$lib/stores';
 
 	import Intro from '$lib/components/Intro.svelte';
-	import SideBarToggle from '$lib/components/SideBarToggle.svelte';
 	import AddSourceDialog from '$lib/components/AddSourceDialog.svelte';
 	import ConfirmDeleteAllDialog from '$lib/components/ConfirmDeleteAllDialog.svelte';
 	import RenameSourceDialog from '$lib/components/RenameSourceDialog.svelte';
@@ -40,9 +39,6 @@
 		setTimeout(() => {
 			app.initStorage();
 			sourceList.initStorage();
-			setTimeout(() => {
-				app.toggleSidebar();
-			}, 800);
 		}, 800);
 	});
 
@@ -57,22 +53,20 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="flex h-dvh w-dvw flex-col-reverse overflow-hidden">
+<div class="flex h-dvh w-dvw flex-col overflow-hidden">
 	{#if app.showIntro}
 		<Intro />
 	{:else}
-		<div class="flex grow overflow-hidden" in:fade={{ delay: 400 }}>
-			<div class="relative flex h-full w-full grow overflow-hidden" in:fade>
-				<SideBarToggle />
-				<SideBar />
-				<div class="relative z-10 grow overflow-hidden">
-					{@render children()}
+		<TopBar />
+		<div class="flex grow overflow-hidden">
+			<SideBar />
+			<div class="flex grow overflow-hidden relative z-10">
+				<div class="flex h-full w-full grow overflow-hidden">
+					<div class="grow overflow-hidden" in:fade={{ delay: 400 }}>
+						{@render children()}
+					</div>
 				</div>
 			</div>
-		</div>
-
-		<div in:fade={{ delay: 400 }}>
-			<TopBar />
 		</div>
 	{/if}
 </div>
