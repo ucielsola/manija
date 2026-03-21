@@ -40,5 +40,8 @@
 		"daisyui": "^5.5.19",
 		"youtube-iframe-ctrl": "^1.0.3",
 		"zod": "^3.24.2"
+	},
+	"volta": {
+		"node": "24.14.0"
 	}
 }
