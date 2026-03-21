@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { Plus } from '$lib/components/icons';
-
 	import Source from '$lib/components/Source.svelte';
 	import Guide from '$lib/components/Guide.svelte';
 
@@ -29,21 +27,6 @@
 				{#each pinnedSources as source (source.id)}
 					<Source {source} />
 				{/each}
-
-				<div class="flex min-h-48 gap-4" in:fade|global={{ delay: 1000 }}>
-					<div
-						class="border-primary/30 flex h-full w-full items-center justify-center gap-4 rounded-lg border border-dashed px-8 py-6 transition-all hover:border-primary hover:bg-base-200/50"
-					>
-						<button
-							class="btn btn-outline btn-wide btn-primary transition-all hover:scale-105"
-							onclick={() => (app.showAddSource = true)}
-							aria-label="Add Video"
-						>
-							<Plus className="w-4 h-4" />
-							Agregar Video
-						</button>
-					</div>
-				</div>
 			</div>
 		</div>
 	{/if}

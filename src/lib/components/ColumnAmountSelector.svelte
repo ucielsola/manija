@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { app, sourceList } from '$lib/stores';
+	import { app, sourceList, apiSourceList } from '$lib/stores';
 
-	let pinnedSources = $derived(sourceList.pinned);
+	let pinnedSources = $derived([...sourceList.pinned, ...apiSourceList.pinned]);
 	let columnOptions = $derived(pinnedSources.map((s, index) => index + 1));
 
 	const handleSelect = (option: number) => {

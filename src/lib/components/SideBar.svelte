@@ -27,18 +27,6 @@
 </script>
 
 <div class="bg-base-100 h-full w-64 flex flex-col gap-4 overflow-hidden border-r px-3 pt-3">
-	<div class="flex items-center gap-2">
-		<button
-			bind:this={addVideoButton}
-			class="btn btn-outline btn-wide btn-sm btn-primary mt-8"
-			onclick={() => (app.showAddSource = true)}
-			aria-label="Add Video"
-		>
-			<Plus className="w-4 h-4" />
-			Agregar Video
-		</button>
-	</div>
-
 	<div class="flex w-full grow flex-col gap-3 overflow-y-auto pb-3">
 		<!-- Mis Videos Section -->
 		<div class="flex flex-col gap-2">
@@ -55,6 +43,15 @@
 			</button>
 
 			{#if userSourcesOpen}
+				<button
+					bind:this={addVideoButton}
+					class="btn btn-outline btn-sm btn-primary"
+					onclick={() => (app.showAddSource = true)}
+					aria-label="Add Video"
+				>
+					<Plus className="w-4 h-4" />
+					Agregar Video
+				</button>
 				{#if sourceList.loading}
 					<div class="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-base-content/20 bg-base-200/30 p-4">
 						<span class="loading loading-spinner loading-md text-primary"></span>
