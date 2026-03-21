@@ -3,8 +3,10 @@
 	import { Hoverable } from '$lib/components/common';
 	import { app, sourceList, toastStore } from '$lib/stores';
 	import type { Source } from '$lib/models/source.svelte';
+	import type { SourceList as SourceListType } from '$lib/models/sourceList.svelte';
+	import type { ApiSourceList as ApiSourceListType } from '$lib/models/apiSourceList.svelte';
 
-	let { source }: { source: Source } = $props();
+	let { source, list = sourceList }: { source: Source; list?: SourceListType | ApiSourceListType } = $props();
 
 	let loaded = $state(false);
 	let hovered = $state(false);
@@ -14,16 +16,18 @@
 	};
 
 	const handlePin = () => {
-		sourceList.toggleSourcePin(source.id);
+		list.toggleSourcePin(source.id);
 	};
 
 	const handleDelete = () => {
-		sourceList.deleteSource(source, () => {
-			toastStore.addToast({
-				text: 'Video eliminado',
-				type: 'primary'
+		if ('deleteSource' in list) {
+			list.deleteSource(source, () => {
+				toastStore.addToast({
+					text: 'Video eliminado',
+					type: 'primary'
+				});
 			});
-		});
+		}
 	};
 
 	const handleRename = () => {

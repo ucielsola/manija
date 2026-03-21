@@ -9,7 +9,7 @@
 	import SideBar from '$lib/components/SideBar.svelte';
 	import Toasts from '$lib/components/Toasts.svelte';
 
-	import { app, sourceList } from '$lib/stores';
+	import { app, sourceList, apiSourceList } from '$lib/stores';
 
 	import Intro from '$lib/components/Intro.svelte';
 	import AddSourceDialog from '$lib/components/AddSourceDialog.svelte';
@@ -39,6 +39,7 @@
 		setTimeout(() => {
 			app.initStorage();
 			sourceList.initStorage();
+			apiSourceList.init();
 		}, 800);
 	});
 

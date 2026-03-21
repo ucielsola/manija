@@ -9,6 +9,8 @@ export { default as PinOff } from './PinOff.svelte';
 export { default as Refresh } from './Refresh.svelte';
 export { default as Trash } from './Trash.svelte';
 export { default as ChevronLeft } from './ChevronLeft.svelte';
+export { default as ChevronDown } from './ChevronDown.svelte';
+export { default as ChevronRight } from './ChevronRight.svelte';
 export { default as Save } from './Save.svelte';
 export { default as Check } from './Check.svelte';
 export { default as Sound } from './Sound.svelte';
@@ -16,5 +18,3 @@ export { default as SoundOff } from './SoundOff.svelte';
 export { default as Github } from './Github.svelte';
 export { default as LinkedIn } from './LinkedIn.svelte';
 export { default as Pencil } from './Pencil.svelte';
-
-

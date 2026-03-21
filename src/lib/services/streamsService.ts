@@ -1,19 +1,19 @@
 import type { StreamsResponse } from '$lib/types/streams';
 
-const API_BASE = import.meta.env.PUBLIC_UCIEL_API || 'https://api.uciel.xyz';
-
 export async function fetchStreams(): Promise<StreamsResponse | void> {
-	const apiKey = import.meta.env.UCIEL_API_KEY || '';
-
 	try {
-		const response = await fetch(`${API_BASE}/manija/streams`, {
-			headers: {
-				Authorization: `Bearer ${apiKey}`
-			}
-		});
+		const response = await fetch('/api/streams');
 
-		return await response.json();
+		if (!response.ok) {
+			const text = await response.text();
+			console.error('[streamsService] Error response body:', text);
+			return;
+		}
+
+		const data = await response.json();
+		console.log('[streamsService] Success, channels:', data?.channels?.length);
+		return data;
 	} catch (error) {
-		console.error('Error fetching streams:', error);
+		console.error('[streamsService] Fetch error:', error);
 	}
 }

@@ -1,11 +1,25 @@
 <script lang="ts">
-	import { Plus, Github, LinkedIn } from '$lib/components/icons';
-	import { app, sourceList } from '$lib/stores';
+	import { Plus, Github, LinkedIn, ChevronDown, ChevronRight } from '$lib/components/icons';
+	import { app, sourceList, apiSourceList } from '$lib/stores';
 	import SourceThumbnail from '$lib/components/SourceThumbnail.svelte';
 
-	let search = $state('');
-	let filteredSources = $derived(sourceList.sources.filter(source => source.name.toLowerCase().includes(search.toLowerCase())));
+	let searchUser = $state('');
+	let searchApi = $state('');
+	let userSourcesOpen = $state(true);
+	let apiSourcesOpen = $state(true);
 	let addVideoButton: HTMLButtonElement;
+
+	let filteredUserSources = $derived(
+		sourceList.sources.filter((source) =>
+			source.name.toLowerCase().includes(searchUser.toLowerCase())
+		)
+	);
+
+	let filteredApiSources = $derived(
+		apiSourceList.sources.filter((source) =>
+			source.name.toLowerCase().includes(searchApi.toLowerCase())
+		)
+	);
 
 	$effect(() => {
 		addVideoButton?.focus();
@@ -25,35 +39,86 @@
 		</button>
 	</div>
 
-	<label class="input input-primary">
-		<svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></g></svg>
-		<input type="search" class="grow" placeholder="Search" bind:value={search} />
-	  </label>
-
 	<div class="flex w-full grow flex-col gap-3 overflow-y-auto pb-3">
-		{#if sourceList.loading}
-			<div class="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-base-content/20 bg-base-200/30 p-6">
-				<span class="loading loading-spinner loading-md text-primary"></span>
-				<span class="text-base-content/60 text-xs font-semibold">
-					Cargando videos...
-				</span>
+		<!-- Mis Videos Section -->
+		<div class="flex flex-col gap-2">
+			<button
+				class="flex items-center gap-2 text-sm font-semibold text-base-content/80 hover:text-base-content"
+				onclick={() => (userSourcesOpen = !userSourcesOpen)}
+			>
+				{#if userSourcesOpen}
+					<ChevronDown className="w-4 h-4" />
+				{:else}
+					<ChevronRight className="w-4 h-4" />
+				{/if}
+				Mis Videos
+			</button>
+
+			{#if userSourcesOpen}
+				{#if sourceList.loading}
+					<div class="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-base-content/20 bg-base-200/30 p-4">
+						<span class="loading loading-spinner loading-md text-primary"></span>
+						<span class="text-base-content/60 text-xs font-semibold">Cargando...</span>
+					</div>
+				{:else if filteredUserSources.length > 0}
+					<label class="input input-primary input-sm">
+						<svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-width="2.5" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></g></svg>
+						<input type="search" class="grow" placeholder="Buscar..." bind:value={searchUser} />
+					</label>
+					<div class="flex w-full flex-col gap-2">
+						{#each filteredUserSources as source, i (source.id || i)}
+							<SourceThumbnail {source} />
+						{/each}
+					</div>
+				{:else}
+					<div class="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-base-content/20 bg-base-200/30 p-4">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-base-content/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M6 3 3 6" /><path d="M18 3 21 6" /><path d="M6 21 3 18" /><path d="M18 21 21 18" />
+						</svg>
+						<span class="text-base-content/60 text-xs font-semibold">Todavía no agregaste videos</span>
+					</div>
+				{/if}
+			{/if}
+		</div>
+
+		<!-- Noticias Argentina Section -->
+		{#if apiSourceList.sources.length > 0 || apiSourceList.loading}
+			<div class="flex flex-col gap-2">
+				<button
+					class="flex items-center gap-2 text-sm font-semibold text-base-content/80 hover:text-base-content"
+					onclick={() => (apiSourcesOpen = !apiSourcesOpen)}
+				>
+					{#if apiSourcesOpen}
+						<ChevronDown className="w-4 h-4" />
+					{:else}
+						<ChevronRight className="w-4 h-4" />
+					{/if}
+					Noticias Argentina
+				</button>
+
+				{#if apiSourcesOpen}
+					{#if apiSourceList.loading}
+						<div class="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-base-content/20 bg-base-200/30 p-4">
+							<span class="loading loading-spinner loading-md text-primary"></span>
+							<span class="text-base-content/60 text-xs font-semibold">Cargando...</span>
+						</div>
+					{:else if filteredApiSources.length > 0}
+						<label class="input input-primary input-sm">
+							<svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-width="2.5" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></g></svg>
+							<input type="search" class="grow" placeholder="Buscar..." bind:value={searchApi} />
+						</label>
+						<div class="flex w-full flex-col gap-2">
+							{#each filteredApiSources as source, i (source.id || i)}
+								<SourceThumbnail {source} list={apiSourceList} />
+							{/each}
+						</div>
+					{:else}
+						<div class="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-base-content/20 bg-base-200/30 p-4">
+							<span class="text-base-content/60 text-xs font-semibold">No hay resultados</span>
+						</div>
+					{/if}
+				{/if}
 			</div>
-		{:else}
-			{#each filteredSources as source, i (source.id || i)}
-				<SourceThumbnail {source} />
-			{:else}
-				<div class="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-base-content/20 bg-base-200/30 p-6">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-base-content/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-						<path d="M6 3 3 6" />
-						<path d="M18 3 21 6" />
-						<path d="M6 21 3 18" />
-						<path d="M18 21 21 18" />
-					</svg>
-					<span class="text-base-content/60 text-xs font-semibold">
-						Todavía no agregaste videos
-					</span>
-				</div>
-			{/each}
 		{/if}
 	</div>
 
