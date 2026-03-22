@@ -1,6 +1,120 @@
-@import "tailwindcss";
-@plugin "daisyui" {
-  themes: light --default, dark --prefersdark;
-}
+@import 'tailwindcss';
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=Inter:wght@400;500;600&family=Manrope:wght@400;500;700&display=swap');
+
+@theme {
+	--font-headline: 'Plus Jakarta Sans', sans-serif;
+	--font-body: 'Inter', sans-serif;
+	--font-label: 'Manrope', sans-serif;
+
+	--color-primary: #b6a0ff;
+	--color-primary-dim: #7e51ff;
+	--color-primary-container: #a98fff;
+	--color-on-primary: #340090;
+	--color-on-primary-fixed: #000000;
+
+	--color-secondary: #00e3fd;
+	--color-secondary-dim: #00d4ec;
+	--color-secondary-container: #006875;
+	--color-on-secondary: #004d57;
+
+	--color-tertiary: #ff6c95;
+	--color-tertiary-dim: #ff6c95;
+	--color-tertiary-container: #fd3e80;
+	--color-on-tertiary: #48001c;
+
+	--color-error: #ff6e84;
+	--color-error-container: #a70138;
+	--color-on-error: #490013;
+	--color-on-error-container: #ffb2b9;
+
+	--color-surface: #0e0e0e;
+	--color-surface-dim: #0e0e0e;
+	--color-surface-container: #1a1919;
+	--color-surface-container-low: #131313;
+	--color-surface-container-lowest: #000000;
+	--color-surface-container-high: #201f1f;
+	--color-surface-container-highest: #262626;
+	--color-surface-bright: #2c2c2c;
+	--color-surface-variant: #262626;
+	--color-surface-tint: #b6a0ff;
+
+	--color-on-surface: #ffffff;
+	--color-on-surface-variant: #adaaaa;
+	--color-on-background: #ffffff;
+	--color-outline: #767575;
+	--color-outline-variant: #484847;
+
+	--color-inverse-surface: #fcf9f8;
+	--color-inverse-on-surface: #565555;
+	--color-inverse-primary: #6834eb;
+
+	--radius-sm: 0.125rem;
+	--radius-md: 0.25rem;
+	--radius-lg: 0.5rem;
+	--radius-full: 0.75rem;
+
+	--animate-breathe: breathe 2s ease-in-out infinite;
+
+	@keyframes breathe {
+		0%,
+		100% {
+			box-shadow: 0 0 20px -5px rgb(0 227 253 / 0.3);
+		}
+		50% {
+			box-shadow: 0 0 30px -3px rgb(0 227 253 / 0.5);
+		}
+	}
+}
+
+* {
+	-moz-tab-size: 4;
+	tab-size: 4;
+}
+
+::-webkit-scrollbar {
+	@apply w-1;
+}
+
+::-webkit-scrollbar-track {
+	@apply bg-surface;
+}
+
+::-webkit-scrollbar-thumb {
+	@apply bg-surface-variant;
+	@apply rounded-full;
+}
+
+@utility glass {
+	@apply bg-surface-container-low/70;
+	@apply backdrop-blur-3xl;
+}
+
+@utility glass-bright {
+	@apply bg-surface-bright/80;
+	@apply backdrop-blur-2xl;
+}
+
+@utility video-glow {
+	@apply shadow-[0_0_20px_-5px_rgba(0_227_253_0.3)];
+}
+
+@utility video-glow-active {
+	@apply animate-breathe;
+}
+
+@utility btn-gradient {
+	@apply from-primary to-primary-dim bg-gradient-to-r;
+}
+
+@utility btn-ghost {
+	@apply border-outline-variant/20 border bg-transparent;
+	@apply hover:border-secondary hover:text-secondary;
+	@apply hover:shadow-[0_0_20px_-5px_rgba(0_227_253_0.2)];
+}
+
+@utility ghost-border {
+	@apply outline-outline-variant/15 outline outline-1;
+}
