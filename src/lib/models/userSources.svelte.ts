@@ -2,7 +2,7 @@ import { AppStorage } from '$lib/models/appStorage';
 import { Source, type SourceData } from '$lib/models/source.svelte';
 import { youtubeURLs } from '$lib/utils/youtubeURLs';
 
-export class SourceList {
+export class UserSources {
 	private _storage?: AppStorage;
 	private _sources = $state<Source[]>([]);
 	private _pinned = $derived<Source[]>(this._sources.filter((source) => source.pinned));

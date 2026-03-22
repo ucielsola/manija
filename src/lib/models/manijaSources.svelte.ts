@@ -4,7 +4,7 @@ import { youtubeURLs } from '$lib/utils/youtubeURLs';
 import { fetchStreams } from '$lib/services/streamsService';
 import type { Channel } from '$lib/types/streams';
 
-export class ApiSourceList {
+export class ManijaSources {
 	private _storage?: AppStorage;
 	private _sources = $state<Source[]>([]);
 	private _pinned = $derived<Source[]>(this._sources.filter((source) => source.pinned));
@@ -15,7 +15,7 @@ export class ApiSourceList {
 
 	async init(): Promise<void> {
 		if (this._storage) {
-			console.warn('ApiSourceList ya está inicializado.');
+			console.warn('ManijaSources ya está inicializado.');
 			return;
 		}
 
@@ -37,25 +37,29 @@ export class ApiSourceList {
 		}
 
 		const pinnedData =
-			this._storage.get<{ id: string; pinned: boolean }[]>('apiSourcesPinned') ?? [];
-		const pinnedMap = new Map(pinnedData.map((d) => [d.id, d.pinned]));
+			this._storage.get<{ id: string; pinned: boolean }[]>('manijaSourcesPinned') ?? [];
 
 		this._sources = response.channels
-			.map((channel) => this.channelToSource(channel, pinnedMap))
+			.map((channel) => this.channelToSource(channel, pinnedData))
 			.filter((source): source is Source => source !== null);
 
 		this._lastFetch = Date.now();
 		this._loading = false;
 	}
 
-	private channelToSource(channel: Channel, pinnedMap: Map<string, boolean>): Source | null {
+	private channelToSource(
+		channel: Channel,
+		pinnedData: { id: string; pinned: boolean }[]
+	): Source | null {
 		const videoId = youtubeURLs.extractURLId(channel.live_url);
 		if (!videoId) return null;
+
+		const pinned = pinnedData.find((d) => d.id === videoId)?.pinned ?? false;
 
 		const data: SourceData = {
 			url: channel.live_url,
 			name: channel.handle,
-			pinned: pinnedMap.get(videoId) ?? false
+			pinned
 		};
 
 		return new Source(data);
@@ -97,7 +101,7 @@ export class ApiSourceList {
 
 	private savePinnedState(): void {
 		const pinnedData = this._sources.map((s) => ({ id: s.id, pinned: s.pinned }));
-		this._storage!.set('apiSourcesPinned', pinnedData);
+		this._storage!.set('manijaSourcesPinned', pinnedData);
 	}
 
 	reset(): void {
