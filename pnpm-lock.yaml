@@ -8,9 +8,9 @@ dependencies:
   '@vercel/analytics':
     specifier: ^2.0.1
     version: 2.0.1(@sveltejs/kit@2.55.0)(svelte@5.54.1)
-  daisyui:
-    specifier: ^5.5.19
-    version: 5.5.19
+  lucide-svelte:
+    specifier: ^0.577.0
+    version: 0.577.0(svelte@5.54.1)
   youtube-iframe-ctrl:
     specifier: ^1.0.3
     version: 1.0.3
@@ -854,10 +854,6 @@ packages:
     hasBin: true
     dev: true
 
-  /daisyui@5.5.19:
-    resolution: {integrity: sha512-pbFAkl1VCEh/MPCeclKL61I/MqRIFFhNU7yiXoDDRapXN4/qNCoMxeCCswyxEEhqL5eiTTfwHvucFtOE71C9sA==}
-    dev: false
-
   /debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
     engines: {node: '>=6.0'}
@@ -1334,6 +1330,14 @@ packages:
     dependencies:
       p-locate: 5.0.0
     dev: true
+
+  /lucide-svelte@0.577.0(svelte@5.54.1):
+    resolution: {integrity: sha512-0i88o57KsaHWnc80J57fY99CWzlZsSdtH5kKjLUJa7z8dum/9/AbINNLzJ7NiRFUdOgMnfAmJt8jFbW2zeC5qQ==}
+    peerDependencies:
+      svelte: ^3 || ^4 || ^5.0.0-next.42
+    dependencies:
+      svelte: 5.54.1
+    dev: false
 
   /magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
