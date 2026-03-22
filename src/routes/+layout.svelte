@@ -1,78 +1,28 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
-
 	import '../app.css';
 
 	import { inject as injectVercelAnalytics } from '@vercel/analytics';
 
-	import TopBar from '$lib/components/TopBar.svelte';
-	import SideBar from '$lib/components/SideBar.svelte';
-	import Toasts from '$lib/components/Toasts.svelte';
-
-	import { app, sourceList, apiSourceList } from '$lib/stores';
-
-	import Intro from '$lib/components/Intro.svelte';
-	import AddSourceDialog from '$lib/components/AddSourceDialog.svelte';
-	import ConfirmDeleteAllDialog from '$lib/components/ConfirmDeleteAllDialog.svelte';
-	import RenameSourceDialog from '$lib/components/RenameSourceDialog.svelte';
-	import { SourcNameMaxLength } from '$lib/consts';
-	import { sliceString } from '$lib/utils/sliceString';
+	import { app, userSources, manijaSources } from '$lib/stores';
 
 	import type { Snippet } from 'svelte';
-	import type { LayoutServerData } from './$types';
 
-	let { children, data }: { children: Snippet; data: LayoutServerData } = $props();
-
-	if (data.liveSources && data.liveSources.length > 0) {
-		data.liveSources.forEach((source) => {
-			sourceList.addSource({
-				name: sliceString(source.video_title, SourcNameMaxLength),
-				url: source.video_url
-			});
-		});
-	}
+	let { children }: { children: Snippet } = $props();
 
 	$effect(() => {
-		app.checkClipboardAccess();
-
 		injectVercelAnalytics();
 		setTimeout(() => {
 			app.initStorage();
-			sourceList.initStorage();
-			apiSourceList.init();
+			userSources.initStorage();
+			manijaSources.init();
 		}, 800);
 	});
-
-	const handleKeydown = (e: KeyboardEvent) => {
-		if (e.key === 'Escape') {
-			app.dismissOpenDialogs();
-		}
-	};
-
-	$inspect(app.showIntro);
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
+<svelte:head>
+	<title>Manija TV</title>
+</svelte:head>
 
-<div class="flex h-dvh w-dvw flex-col overflow-hidden">
-	{#if app.showIntro}
-		<Intro />
-	{:else}
-		<TopBar />
-		<div class="flex grow overflow-hidden">
-			<SideBar />
-			<div class="flex grow overflow-hidden relative z-10">
-				<div class="flex h-full w-full grow overflow-hidden">
-					<div class="grow overflow-hidden" in:fade={{ delay: 400 }}>
-						{@render children()}
-					</div>
-				</div>
-			</div>
-		</div>
-	{/if}
+<div class="h-screen w-screen">
+	{@render children()}
 </div>
-
-<Toasts />
-<AddSourceDialog />
-<ConfirmDeleteAllDialog />
-<RenameSourceDialog />

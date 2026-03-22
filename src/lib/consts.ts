@@ -1,1 +1,1 @@
-export const SourcNameMaxLength = 24
+export const SourcNameMaxLength = 24;

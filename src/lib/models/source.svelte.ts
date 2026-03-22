@@ -15,6 +15,7 @@ export class Source {
 	private _thumbnail: string;
 	private _pinned: boolean = $state(false);
 	private _muted: boolean = $state(false);
+	private _playing: boolean = $state(false);
 	private _controller?: SourceController;
 
 	constructor({ url, name, pinned = false }: SourceData) {
@@ -62,6 +63,10 @@ export class Source {
 		return this._muted;
 	}
 
+	get playing() {
+		return this._playing;
+	}
+
 	get data(): SourceData {
 		return {
 			url: this._url,
@@ -71,9 +76,14 @@ export class Source {
 	}
 
 	attachController(iframe: HTMLIFrameElement) {
+		if (!iframe) return;
+
 		this._controller = new SourceController(iframe);
 		this._controller.on('muteChange', (muted: unknown) => {
 			this._muted = muted as boolean;
+		});
+		this._controller.on('playbackChange', (playing: unknown) => {
+			this._playing = playing as boolean;
 		});
 	}
 
@@ -81,9 +91,29 @@ export class Source {
 		this._pinned = !this._pinned;
 	}
 
+	play() {
+		this._controller?.play();
+	}
+
+	pause() {
+		this._controller?.pause();
+	}
+
+	togglePlay() {
+		if (this._playing) {
+			this.pause();
+		} else {
+			this.play();
+		}
+	}
+
 	setMute(mute: boolean) {
 		if (this._controller) {
-			mute ? this._controller.mute() : this._controller.unMute();
+			if (mute) {
+				this._controller.mute();
+			} else {
+				this._controller.unMute();
+			}
 		}
 	}
 }

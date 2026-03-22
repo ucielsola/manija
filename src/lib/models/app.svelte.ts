@@ -13,7 +13,6 @@ export class App implements StorageProvider {
 
 	public initStorage(): void {
 		if (this.storage) {
-			console.warn('Storage is already initialized.');
 			return;
 		}
 
@@ -88,13 +87,13 @@ export class App implements StorageProvider {
 		}
 
 		if (typeof navigator === 'undefined') {
-			console.error('NO NAVI!');
 			return;
 		}
 
 		try {
-			// Use 'as any' to bypass TypeScript's type checking for this specific call
-			const permission = await navigator.permissions.query({ name: 'clipboard-read' as any });
+			const permission = await navigator.permissions.query({
+				name: 'clipboard-read' as PermissionName
+			});
 
 			this._hasClipboardAccess = permission?.state === 'granted';
 
@@ -109,7 +108,7 @@ export class App implements StorageProvider {
 				}
 			});
 		} catch (error) {
-			console.error('Error al verificar permiso del portapapeles:', error);
+			// Clipboard permissions not available
 		}
 	}
 

@@ -1,6 +1,6 @@
 {
 	"name": "manija-tv",
-	"version": "2",
+	"version": "2.0.0",
 	"private": false,
 	"scripts": {
 		"dev": "vite dev",
@@ -37,7 +37,7 @@
 	"packageManager": "pnpm@10.30.3",
 	"dependencies": {
 		"@vercel/analytics": "^2.0.1",
-		"daisyui": "^5.5.19",
+		"lucide-svelte": "^0.577.0",
 		"youtube-iframe-ctrl": "^1.0.3",
 		"zod": "^4.3.6"
 	},

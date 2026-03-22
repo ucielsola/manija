@@ -24,13 +24,13 @@ pnpm format        # Format with Prettier
 
 ## Architecture
 
-**Models (Svelte 5 runes):** `src/lib/models/*.svelte.ts` - `SourceList`, `ApiSourceList`, `App`, `ToastStore`
+**Models (Svelte 5 runes):** `src/lib/models/*.svelte.ts` - `UserSources`, `ManijaSources`, `App`, `ToastStore`
 
 **Services:** `src/lib/services/` - API integrations (`streamsService.ts`)
 
 **Components:** `src/lib/components/` - UI components with icon subdirectory
 
-**Stores:** Exposed from `src/lib/stores/index.ts` - `app`, `sourceList`, `apiSourceList`, `toastStore`
+**Stores:** Exposed from `src/lib/stores/index.ts` - `app`, `userSources`, `manijaSources`, `toastStore`
 
 ## Key Dependencies
 
