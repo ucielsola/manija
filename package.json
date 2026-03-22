@@ -1,6 +1,6 @@
 {
 	"name": "manija-tv",
-	"version": "2",
+	"version": "2.0.0",
 	"private": false,
 	"scripts": {
 		"dev": "vite dev",
