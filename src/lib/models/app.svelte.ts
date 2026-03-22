@@ -13,7 +13,6 @@ export class App implements StorageProvider {
 
 	public initStorage(): void {
 		if (this.storage) {
-			console.warn('Storage is already initialized.');
 			return;
 		}
 
@@ -88,7 +87,6 @@ export class App implements StorageProvider {
 		}
 
 		if (typeof navigator === 'undefined') {
-			console.error('NO NAVI!');
 			return;
 		}
 
@@ -110,7 +108,7 @@ export class App implements StorageProvider {
 				}
 			});
 		} catch (error) {
-			console.error('Error al verificar permiso del portapapeles:', error);
+			// Clipboard permissions not available
 		}
 	}
 

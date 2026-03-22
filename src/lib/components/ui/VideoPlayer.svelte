@@ -24,7 +24,6 @@
 
 	$effect(() => {
 		if (!isPlaceholder && source && iframeRef) {
-			console.log('[VideoPlayer] Attaching controller for:', displayTitle);
 			source.attachController(iframeRef);
 		}
 	});

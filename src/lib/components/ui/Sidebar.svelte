@@ -34,7 +34,7 @@
 			>
 				<div class="flex items-center gap-2">
 					<Grid size={14} />
-					<span>Grid</span>
+					<span>Grilla</span>
 				</div>
 				{#if showGridDropdown}
 					<ChevronUp size={14} />

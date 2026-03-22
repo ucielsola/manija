@@ -3,10 +3,6 @@ import { UCIEL_API_KEY } from '$env/static/private';
 const BACKEND_URL = 'https://api.uciel.xyz';
 
 export async function GET(): Promise<Response> {
-	console.log('[streams proxy] Request received');
-	console.log('[streams proxy] Backend URL:', `${BACKEND_URL}/manija/streams`);
-	console.log('[streams proxy] API Key present:', !!UCIEL_API_KEY);
-
 	try {
 		const response = await fetch(`${BACKEND_URL}/manija/streams`, {
 			headers: {
@@ -14,10 +10,7 @@ export async function GET(): Promise<Response> {
 			}
 		});
 
-		console.log('[streams proxy] Response status:', response.status);
-
 		if (!response.ok) {
-			console.error('[streams proxy] Non-OK response:', response.status);
 			return Response.json(
 				{ error: `API returned status ${response.status}`, channels: [] },
 				{ status: response.status }
@@ -25,12 +18,9 @@ export async function GET(): Promise<Response> {
 		}
 
 		const text = await response.text();
-		console.log('[streams proxy] Response body:', text);
-
 		const data = JSON.parse(text);
 		return Response.json(data);
 	} catch (error) {
-		console.error('[streams proxy] Error:', error);
 		return Response.json({ error: 'Failed to fetch streams', channels: [] }, { status: 500 });
 	}
 }

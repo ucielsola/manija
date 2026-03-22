@@ -1,25 +1,19 @@
 <script lang="ts">
-	import { userSources, manijaSources } from '$lib/stores';
+	import { userSources, manijaSources, librarySearch } from '$lib/stores';
 	import TopBar from '$lib/components/ui/TopBar.svelte';
 	import Sidebar from '$lib/components/ui/Sidebar.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import AccordionSection from '$lib/components/ui/AccordionSection.svelte';
 	import SourceList from '$lib/components/ui/SourceList.svelte';
 	import VideoGrid from '$lib/components/ui/VideoGrid.svelte';
+	import { Search, X } from 'lucide-svelte';
 
 	let expandedSection = $state<'noticias' | 'mis-videos' | null>('noticias');
 
 	let apiSources = $derived.by(() => manijaSources.sources);
 	let gridSources = $derived.by(() => [...manijaSources.pinned, ...userSources.sources]);
 	let gridLoading = $derived.by(() => manijaSources.loading && userSources.sources.length === 0);
-	let playingCount = $derived.by(() => {
-		const count = gridSources.filter((s) => s.playing).length;
-		console.log('[+page] Playing count updated:', {
-			count,
-			sources: gridSources.map((s) => ({ name: s.name, playing: s.playing }))
-		});
-		return count;
-	});
+	let playingCount = $derived.by(() => gridSources.filter((s) => s.playing).length);
 
 	function toggleSection(section: 'noticias' | 'mis-videos') {
 		expandedSection = expandedSection === section ? null : section;
@@ -56,6 +50,21 @@
 		userSources.muteAll();
 		manijaSources.muteAll();
 	}
+
+	function toggleSearchPin(sourceId: string) {
+		if (manijaSources.sources.some((s) => s.id === sourceId)) {
+			manijaSources.toggleSourcePin(sourceId);
+		} else {
+			userSources.toggleSourcePin(sourceId);
+		}
+	}
+
+	function isSearchResultPinned(sourceId: string): boolean {
+		return (
+			manijaSources.pinned.some((s) => s.id === sourceId) ||
+			userSources.pinned.some((s) => s.id === sourceId)
+		);
+	}
 </script>
 
 <svelte:head>
@@ -70,42 +79,73 @@
 		<Sidebar activeStreams={playingCount} onMuteAll={handleMuteAll}>
 			<div>
 				<div class="mb-2 flex items-center justify-between px-3">
-					<span class="text-[10px] font-bold tracking-widest text-neutral-500 uppercase"
-						>Biblioteca</span
-					>
+					<span class="text-[10px] font-bold tracking-widest text-neutral-500 uppercase">
+						Biblioteca
+					</span>
 				</div>
 
-				<div class="space-y-1">
-					<AccordionSection
-						title="Noticias Argentina"
-						expanded={expandedSection === 'noticias'}
-						onToggle={() => toggleSection('noticias')}
-					>
-						<SourceList
-							sources={apiSources}
-							loading={manijaSources.loading}
-							emptyMessage="No hay canales disponibles"
-							onPinToggle={toggleApiPin}
-							isPinned={isApiSourcePinned}
-							showPinButton
+				<div class="px-3 pb-3">
+					<div class="relative">
+						<Search size={14} class="absolute top-1/2 left-3 -translate-y-1/2 text-neutral-500" />
+						<input
+							bind:value={librarySearch.searchTerm}
+							type="text"
+							placeholder="Buscar videos..."
+							class="bg-surface-container-low text-on-surface focus:ring-primary/50 w-full rounded-md py-2 pr-8 pl-9 text-xs placeholder:text-neutral-500 focus:ring-2 focus:outline-none"
 						/>
-					</AccordionSection>
-
-					<AccordionSection
-						title="Mis Videos"
-						expanded={expandedSection === 'mis-videos'}
-						onToggle={() => toggleSection('mis-videos')}
-					>
-						<SourceList
-							sources={userSources.sources}
-							loading={userSources.loading}
-							emptyMessage="No tienes videos guardados"
-							onPinToggle={toggleLibraryPin}
-						>
-							<Button variant="primary">+ Agregar Video</Button>
-						</SourceList>
-					</AccordionSection>
+						{#if librarySearch.hasSearch}
+							<button
+								onclick={() => librarySearch.clearSearch()}
+								class="absolute top-1/2 right-3 -translate-y-1/2 text-neutral-500 hover:text-neutral-200"
+							>
+								<X size={14} />
+							</button>
+						{/if}
+					</div>
 				</div>
+
+				{#if !librarySearch.hasSearch}
+					<div class="space-y-1">
+						<AccordionSection
+							title="Noticias Argentina"
+							expanded={expandedSection === 'noticias'}
+							onToggle={() => toggleSection('noticias')}
+						>
+							<SourceList
+								sources={apiSources}
+								loading={manijaSources.loading}
+								emptyMessage="No hay canales disponibles"
+								onPinToggle={toggleApiPin}
+								isPinned={isApiSourcePinned}
+								showPinButton
+							/>
+						</AccordionSection>
+
+						<AccordionSection
+							title="Mis Videos"
+							expanded={expandedSection === 'mis-videos'}
+							onToggle={() => toggleSection('mis-videos')}
+						>
+							<SourceList
+								sources={userSources.sources}
+								loading={userSources.loading}
+								emptyMessage="No tienes videos guardados"
+								onPinToggle={toggleLibraryPin}
+							>
+								<Button variant="primary">+ Agregar Video</Button>
+							</SourceList>
+						</AccordionSection>
+					</div>
+				{:else}
+					<SourceList
+						sources={librarySearch.filteredSources}
+						loading={false}
+						emptyMessage="No se encontraron resultados"
+						onPinToggle={toggleSearchPin}
+						isPinned={isSearchResultPinned}
+						showPinButton
+					/>
+				{/if}
 			</div>
 		</Sidebar>
 

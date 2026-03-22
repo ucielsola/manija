@@ -5,8 +5,6 @@ export async function fetchStreams(): Promise<StreamsResponse> {
 		const response = await fetch('/api/streams');
 
 		if (!response.ok) {
-			const text = await response.text();
-			console.error('[streamsService] Error response:', text);
 			return {
 				channels: [],
 				total: 0,
@@ -18,10 +16,8 @@ export async function fetchStreams(): Promise<StreamsResponse> {
 		}
 
 		const data = await response.json();
-		console.log('[streamsService] Success, channels:', data?.channels?.length);
 		return data;
 	} catch (error) {
-		console.error('[streamsService] Fetch error:', error);
 		return {
 			channels: [],
 			total: 0,

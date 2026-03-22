@@ -26,19 +26,12 @@ export class SourceController {
 			const muted = message.info?.muted;
 			const playerState = message.info?.playerState;
 
-			console.log('[SourceController] Message received:', {
-				muted,
-				playerState,
-				stateName: playerState !== undefined ? YouTubePlayerState[playerState] : 'undefined'
-			});
-
 			if (muted !== undefined && muted !== this.lastMutedState) {
 				this.lastMutedState = muted;
 				this.eventListeners['muteChange']?.(muted);
 			}
 
 			if (playerState === undefined) {
-				console.log('[SourceController] Skipping undefined playerState, keeping last state');
 				return;
 			}
 
@@ -47,11 +40,6 @@ export class SourceController {
 
 			if (playing !== this.lastPlayingState) {
 				this.lastPlayingState = playing;
-				console.log('[SourceController] Playback state changed:', {
-					playing,
-					playerState,
-					stateName: YouTubePlayerState[playerState]
-				});
 				this.eventListeners['playbackChange']?.(playing);
 			}
 		});

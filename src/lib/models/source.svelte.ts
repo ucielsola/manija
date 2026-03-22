@@ -78,13 +78,11 @@ export class Source {
 	attachController(iframe: HTMLIFrameElement) {
 		if (!iframe) return;
 
-		console.log('[Source] Attaching controller for:', this._name);
 		this._controller = new SourceController(iframe);
 		this._controller.on('muteChange', (muted: unknown) => {
 			this._muted = muted as boolean;
 		});
 		this._controller.on('playbackChange', (playing: unknown) => {
-			console.log('[Source] Playback change for', this._name, ':', playing);
 			this._playing = playing as boolean;
 		});
 	}
