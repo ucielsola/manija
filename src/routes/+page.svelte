@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { userSources, manijaSources, librarySearch } from '$lib/stores';
+	import { app, userSources, manijaSources, librarySearch } from '$lib/stores';
 	import TopBar from '$lib/components/ui/TopBar.svelte';
 	import Sidebar from '$lib/components/ui/Sidebar.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import AccordionSection from '$lib/components/ui/AccordionSection.svelte';
 	import SourceList from '$lib/components/ui/SourceList.svelte';
 	import VideoGrid from '$lib/components/ui/VideoGrid.svelte';
+	import AddSourceDialog from '$lib/components/ui/AddSourceDialog.svelte';
 	import { Search, X } from 'lucide-svelte';
 
 	let expandedSection = $state<'noticias' | 'mis-videos' | null>('noticias');
@@ -13,12 +14,20 @@
 	let apiSources = $derived.by(() => manijaSources.sources);
 	let gridSources = $derived.by(() => [...manijaSources.pinned, ...userSources.sources]);
 	let gridLoading = $derived.by(() => manijaSources.loading && userSources.sources.length === 0);
-	let playingCount = $derived.by(() => gridSources.filter((s) => s.playing).length);
+	let playingCount = $derived.by(
+		() => gridSources.filter((s: { playing?: boolean }) => s.playing).length
+	);
 
 	function toggleSection(section: 'noticias' | 'mis-videos') {
 		expandedSection = expandedSection === section ? null : section;
 		if (section === 'noticias' && !manijaSources.lastFetch) {
 			manijaSources.fetchSources();
+		}
+	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape') {
+			app.showAddSource = false;
 		}
 	}
 
@@ -71,6 +80,8 @@
 	<title>Manija TV</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </svelte:head>
+
+<svelte:window onkeydown={handleKeydown} />
 
 <div class="bg-surface h-screen w-screen overflow-hidden">
 	<TopBar />
@@ -132,7 +143,9 @@
 								emptyMessage="No tienes videos guardados"
 								onPinToggle={toggleLibraryPin}
 							>
-								<Button variant="primary">+ Agregar Video</Button>
+								<Button variant="primary" onclick={() => (app.showAddSource = true)}>
+									+ Agregar Video
+								</Button>
 							</SourceList>
 						</AccordionSection>
 					</div>
@@ -154,3 +167,5 @@
 		</main>
 	</div>
 </div>
+
+<AddSourceDialog />

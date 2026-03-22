@@ -39,7 +39,7 @@
 			<PlayCircle size={40} class="text-neutral-400" />
 		</div>
 		<p class="font-label mb-4 text-lg text-neutral-500">No hay streams disponibles</p>
-		<Button variant="primary">+ Agregar Video</Button>
+		<Button variant="primary" onclick={() => (app.showAddSource = true)}>+ Agregar Video</Button>
 	</div>
 {:else}
 	<div
