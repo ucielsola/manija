@@ -16,6 +16,14 @@ export async function GET(): Promise<Response> {
 
 		console.log('[streams proxy] Response status:', response.status);
 
+		if (!response.ok) {
+			console.error('[streams proxy] Non-OK response:', response.status);
+			return Response.json(
+				{ error: `API returned status ${response.status}`, channels: [] },
+				{ status: response.status }
+			);
+		}
+
 		const text = await response.text();
 		console.log('[streams proxy] Response body:', text);
 
@@ -23,6 +31,6 @@ export async function GET(): Promise<Response> {
 		return Response.json(data);
 	} catch (error) {
 		console.error('[streams proxy] Error:', error);
-		return Response.json({ error: 'Failed to fetch streams' }, { status: 500 });
+		return Response.json({ error: 'Failed to fetch streams', channels: [] }, { status: 500 });
 	}
 }
