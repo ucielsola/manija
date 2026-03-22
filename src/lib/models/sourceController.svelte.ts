@@ -1,46 +1,79 @@
 import YouTubeIFrameCtrl from 'youtube-iframe-ctrl';
-import  type { YouTubeMessage } from "$lib/types/common";
+import type { YouTubeMessage } from '$lib/types/common';
 
-export type SourceControllerEvents = "muteChange"
+export enum YouTubePlayerState {
+	UNSTARTED = -1,
+	ENDED = 0,
+	PLAYING = 1,
+	PAUSED = 2,
+	BUFFERING = 3,
+	CUED = 5
+}
+
+export type SourceControllerEvents = 'muteChange' | 'playbackChange';
 
 export class SourceController {
-   private controller: YouTubeIFrameCtrl | null = null;
-   private eventListeners: { [key: string]: (x: unknown) => void } = {};
-   private lastMutedState = $state<boolean>(false);
+	private controller: YouTubeIFrameCtrl | null = null;
+	private eventListeners: { [key: string]: (x: unknown) => void } = {};
+	private lastMutedState = $state<boolean>(false);
+	private lastPlayingState = $state<boolean>(false);
 
-    constructor(iframe: HTMLIFrameElement) {
-        this.controller = new YouTubeIFrameCtrl(iframe);
+	constructor(iframe: HTMLIFrameElement) {
+		this.controller = new YouTubeIFrameCtrl(iframe);
 
-        iframe.addEventListener('ytmessage' as keyof HTMLElementEventMap, (e: Event)=> {
-            const message = (e as CustomEvent).detail as YouTubeMessage;
-            const muted = message.info?.muted
+		iframe.addEventListener('ytmessage' as keyof HTMLElementEventMap, (e: Event) => {
+			const message = (e as CustomEvent).detail as YouTubeMessage;
+			const muted = message.info?.muted;
+			const playerState = message.info?.playerState;
 
-            if(muted === undefined) return;
+			console.log('[SourceController] Message received:', {
+				muted,
+				playerState,
+				stateName: playerState !== undefined ? YouTubePlayerState[playerState] : 'undefined'
+			});
 
-            if (muted !== this.lastMutedState) {
-                this.lastMutedState = muted;
-                this.eventListeners["muteChange"]?.(muted);
-            }
-        });
-    }
+			if (muted !== undefined && muted !== this.lastMutedState) {
+				this.lastMutedState = muted;
+				this.eventListeners['muteChange']?.(muted);
+			}
 
-    play() {
-        this.controller?.play();
-    }
+			if (playerState === undefined) {
+				console.log('[SourceController] Skipping undefined playerState, keeping last state');
+				return;
+			}
 
-    pause() {
-        this.controller?.pause();
-    }
+			const activeStates = [YouTubePlayerState.PLAYING, YouTubePlayerState.BUFFERING];
+			const playing = activeStates.includes(playerState);
 
-    mute() {
-        this.controller?.mute();
-    }
+			if (playing !== this.lastPlayingState) {
+				this.lastPlayingState = playing;
+				console.log('[SourceController] Playback state changed:', {
+					playing,
+					playerState,
+					stateName: YouTubePlayerState[playerState]
+				});
+				this.eventListeners['playbackChange']?.(playing);
+			}
+		});
+	}
 
-    unMute() {
-        this.controller?.unMute();
-    }
+	play() {
+		this.controller?.play();
+	}
 
-    on(event: SourceControllerEvents, callback: (x: unknown)=> void) {
-        this.eventListeners[event] = callback
-    }
+	pause() {
+		this.controller?.pause();
+	}
+
+	mute() {
+		this.controller?.mute();
+	}
+
+	unMute() {
+		this.controller?.unMute();
+	}
+
+	on(event: SourceControllerEvents, callback: (x: unknown) => void) {
+		this.eventListeners[event] = callback;
+	}
 }

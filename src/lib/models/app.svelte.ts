@@ -93,8 +93,9 @@ export class App implements StorageProvider {
 		}
 
 		try {
-			// Use 'as any' to bypass TypeScript's type checking for this specific call
-			const permission = await navigator.permissions.query({ name: 'clipboard-read' as any });
+			const permission = await navigator.permissions.query({
+				name: 'clipboard-read' as PermissionName
+			});
 
 			this._hasClipboardAccess = permission?.state === 'granted';
 
