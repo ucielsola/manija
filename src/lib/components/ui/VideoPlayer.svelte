@@ -5,14 +5,12 @@
 	let {
 		source,
 		title,
-		channel,
 		thumbnail,
 		isActive = false,
 		onClose
 	}: {
 		source?: Source;
 		title?: string;
-		channel?: string;
 		thumbnail?: string;
 		isActive?: boolean;
 		onClose?: () => void;
@@ -22,7 +20,6 @@
 
 	let isPlaceholder = $derived(!source);
 	let displayTitle = $derived(source?.name || title);
-	let displayChannel = $derived(channel);
 	let displayThumbnail = $derived(source?.thumbnail || thumbnail);
 
 	$effect(() => {
