@@ -9,10 +9,10 @@ export type SourceData = {
 
 export class Source {
 	private _id: string;
-	private _name: string;
-	private _url: string;
-	private _embedUrl: string;
-	private _thumbnail: string;
+	private _name = $state<string>('');
+	private _url = $state<string>('');
+	private _embedUrl = $state<string>('');
+	private _thumbnail = $state<string>('');
 	private _pinned: boolean = $state(false);
 	private _muted: boolean = $state(false);
 	private _playing: boolean = $state(false);
@@ -23,6 +23,14 @@ export class Source {
 		this._url = url;
 		this._embedUrl = youtubeURLs.makeEmbedURL(url) || '';
 		this._id = youtubeURLs.extractURLId(url) || '';
+		this._thumbnail = youtubeURLs.thumbnailURL(this._id);
+		this._pinned = pinned;
+	}
+
+	update({ url, name, pinned }: SourceData): void {
+		this._name = name;
+		this._url = url;
+		this._embedUrl = youtubeURLs.makeEmbedURL(url) || '';
 		this._thumbnail = youtubeURLs.thumbnailURL(this._id);
 		this._pinned = pinned;
 	}

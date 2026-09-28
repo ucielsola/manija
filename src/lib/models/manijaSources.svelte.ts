@@ -37,10 +37,20 @@ export class ManijaSources {
 			const response = await fetchStreams();
 			const pinnedData =
 				this._storage.get<{ id: string; pinned: boolean }[]>('manijaSourcesPinned') ?? [];
+			const existingSources = new Map(this._sources.map((source) => [source.id, source]));
 
 			this._channels = response.channels;
 			this._sources = response.channels
-				.map((channel) => this.channelToSource(channel, pinnedData))
+				.map((channel) => {
+					const updatedSource = this.channelToSource(channel, pinnedData);
+					if (!updatedSource) return null;
+
+					const existingSource = existingSources.get(updatedSource.id);
+					if (!existingSource) return updatedSource;
+
+					existingSource.update(updatedSource.data);
+					return existingSource;
+				})
 				.filter((source): source is Source => source !== null);
 			this._lastFetch = Date.now();
 		} catch (error) {
