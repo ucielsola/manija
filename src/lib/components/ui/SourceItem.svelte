@@ -24,7 +24,7 @@
 		? 'bg-white/5'
 		: 'hover:bg-white/5'}"
 >
-	<button onclick={() => onAdd?.(source)} class="flex flex-1 items-center gap-3 text-left">
+	<button onclick={() => onAdd?.(source)} class="flex min-w-0 flex-1 items-center gap-3 text-left">
 		<div class="bg-surface-container-highest h-10 w-10 overflow-hidden rounded">
 			<img
 				src={source.thumbnail}
@@ -49,7 +49,9 @@
 				e.stopPropagation();
 				onPinToggle(source.id);
 			}}
-			class="absolute top-1/2 right-3 z-10 -translate-y-1/2 rounded bg-white/10 p-1 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-white/20"
+			class="absolute top-1/2 right-3 z-10 -translate-y-1/2 rounded bg-white/10 p-1 opacity-100 transition-opacity hover:bg-white/20 lg:opacity-0 lg:group-focus-within:opacity-100 lg:group-hover:opacity-100"
+			aria-label={pinnedState ? 'Quitar de la grilla' : 'Fijar en la grilla'}
+			title={pinnedState ? 'Quitar de la grilla' : 'Fijar en la grilla'}
 		>
 			{#if !pinnedState}
 				<Pin size={16} fill="currentColor" class="text-primary fill-current" />

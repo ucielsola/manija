@@ -18,7 +18,7 @@
 	);
 	let isValid = $derived(urlSchema.safeParse(url).success && name.length > 0);
 	let disableSubmit = $derived(urlAlreadyExists || !isValid || loading);
-	let urlInput: HTMLInputElement;
+	let urlInput = $state<HTMLInputElement>();
 
 	function onCancel() {
 		app.showAddSource = false;

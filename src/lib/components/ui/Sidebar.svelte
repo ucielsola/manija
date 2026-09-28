@@ -6,18 +6,32 @@
 	let {
 		children,
 		activeStreams = 0,
-		onMuteAll
+		onMuteAll,
+		open = false,
+		onClose
 	}: {
 		children: Snippet;
 		activeStreams?: number;
 		onMuteAll?: () => void;
+		open?: boolean;
+		onClose?: () => void;
 	} = $props();
 
 	let showGridDropdown = $state(false);
 </script>
 
+{#if open}
+	<button
+		class="fixed inset-0 top-14 z-30 bg-black/60 backdrop-blur-sm lg:hidden"
+		aria-label="Cerrar menú"
+		onclick={onClose}
+	></button>
+{/if}
+
 <aside
-	class="bg-surface-container-low fixed top-14 left-0 z-40 flex h-[calc(100vh-3.5rem)] w-64 flex-col transition-all duration-300"
+	class="bg-surface-container-low fixed top-14 left-0 z-40 flex h-[calc(100dvh-3.5rem)] w-[min(20rem,calc(100vw-2.5rem))] flex-col border-r border-white/5 transition-transform duration-300 lg:w-64 {open
+		? 'translate-x-0'
+		: '-translate-x-full lg:translate-x-0'}"
 >
 	<div class="flex flex-col gap-1 p-6">
 		<span class="font-body text-primary text-xs font-medium tracking-widest uppercase"

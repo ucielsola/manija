@@ -7,7 +7,9 @@
 		Plus,
 		Radio,
 		RefreshCw,
-		ShieldCheck
+		ShieldCheck,
+		Trash2,
+		X
 	} from 'lucide-svelte';
 
 	interface Channel {
@@ -30,6 +32,7 @@
 	let busy = $state(false);
 	let error = $state('');
 	let notice = $state('');
+	let channelToDelete = $state<Channel | null>(null);
 
 	$effect(() => {
 		authenticated = data.authenticated;
@@ -92,6 +95,27 @@
 			await refreshChannels();
 		} catch (cause) {
 			error = cause instanceof Error ? cause.message : 'No se pudo agregar el canal';
+		} finally {
+			busy = false;
+		}
+	}
+
+	async function removeChannel() {
+		if (!channelToDelete) return;
+		busy = true;
+		error = '';
+		notice = '';
+		try {
+			const response = await fetch(`/api/admin/channels/${channelToDelete.id}`, {
+				method: 'DELETE'
+			});
+			const result = await response.json();
+			if (!response.ok) throw new Error(result.error ?? 'No se pudo quitar el canal');
+			notice = `${channelToDelete.handle} ya no se monitorea.`;
+			channelToDelete = null;
+			await refreshChannels();
+		} catch (cause) {
+			error = cause instanceof Error ? cause.message : 'No se pudo quitar el canal';
 		} finally {
 			busy = false;
 		}
@@ -297,6 +321,15 @@
 									>
 										Abrir YouTube <ExternalLink size={13} />
 									</a>
+									<button
+										onclick={() => (channelToDelete = channel)}
+										disabled={busy}
+										aria-label={`Quitar ${channel.handle}`}
+										title="Quitar canal"
+										class="text-on-surface-variant hover:bg-error/10 hover:text-error inline-flex size-9 items-center justify-center rounded-lg transition-colors disabled:opacity-50"
+									>
+										<Trash2 size={15} />
+									</button>
 								</div>
 							</li>
 						{/each}
@@ -306,6 +339,61 @@
 		{/if}
 	</div>
 </main>
+
+{#if channelToDelete}
+	<div
+		class="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+		role="presentation"
+		onclick={(event) => {
+			if (event.target === event.currentTarget && !busy) channelToDelete = null;
+		}}
+	>
+		<dialog
+			open
+			class="border-outline-variant/30 bg-surface-container w-full max-w-md rounded-2xl border p-6 shadow-2xl"
+			role="alertdialog"
+			aria-modal="true"
+			aria-labelledby="remove-channel-title"
+			aria-describedby="remove-channel-description"
+		>
+			<div class="mb-5 flex items-start justify-between">
+				<div class="bg-error/10 text-error flex size-11 items-center justify-center rounded-xl">
+					<Trash2 size={20} />
+				</div>
+				<button
+					onclick={() => (channelToDelete = null)}
+					disabled={busy}
+					aria-label="Cancelar"
+					class="text-on-surface-variant hover:text-on-surface rounded-lg p-2 transition-colors"
+				>
+					<X size={18} />
+				</button>
+			</div>
+			<h2 id="remove-channel-title" class="font-headline text-xl font-bold">Quitar canal</h2>
+			<p id="remove-channel-description" class="text-on-surface-variant mt-2 text-sm leading-6">
+				¿Dejar de monitorear <strong class="text-on-surface">{channelToDelete.handle}</strong>? No
+				va a reaparecer al reiniciar el servicio. Podés volver a agregarlo más adelante.
+			</p>
+			<div class="mt-7 flex justify-end gap-3">
+				<button
+					onclick={() => (channelToDelete = null)}
+					disabled={busy}
+					class="btn-ghost text-on-surface-variant rounded-lg px-4 py-2.5 text-xs font-bold"
+				>
+					Cancelar
+				</button>
+				<button
+					onclick={removeChannel}
+					disabled={busy}
+					class="bg-error text-on-error hover:bg-error/90 inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-xs font-bold transition-colors disabled:opacity-60"
+				>
+					{#if busy}<LoaderCircle size={14} class="animate-spin" />{:else}<Trash2 size={14} />{/if}
+					Quitar canal
+				</button>
+			</div>
+		</dialog>
+	</div>
+{/if}
 
 <style>
 	.status-dot {

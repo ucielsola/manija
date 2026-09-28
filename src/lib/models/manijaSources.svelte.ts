@@ -12,6 +12,7 @@ export class ManijaSources {
 	private _allMuted = $derived<boolean>(this._muted.length === this._sources.length);
 	private _loading = $state<boolean>(false);
 	private _lastFetch = $state<number>(0);
+	private _error = $state<string | null>(null);
 
 	async init(): Promise<void> {
 		if (this._storage) {
@@ -25,26 +26,27 @@ export class ManijaSources {
 
 	async fetchSources(): Promise<void> {
 		this._loading = true;
+		this._error = null;
 
 		if (!this._storage) {
 			this._storage = new AppStorage();
 		}
 
-		const response = await fetchStreams();
-		if (!response?.channels) {
+		try {
+			const response = await fetchStreams();
+			const pinnedData =
+				this._storage.get<{ id: string; pinned: boolean }[]>('manijaSourcesPinned') ?? [];
+
+			this._sources = response.channels
+				.map((channel) => this.channelToSource(channel, pinnedData))
+				.filter((source): source is Source => source !== null);
+			this._lastFetch = Date.now();
+		} catch (error) {
+			console.error('No se pudieron actualizar los canales de Manija:', error);
+			this._error = 'No se pudieron actualizar los canales. Revisá tu conexión e intentá de nuevo.';
+		} finally {
 			this._loading = false;
-			return;
 		}
-
-		const pinnedData =
-			this._storage.get<{ id: string; pinned: boolean }[]>('manijaSourcesPinned') ?? [];
-
-		this._sources = response.channels
-			.map((channel) => this.channelToSource(channel, pinnedData))
-			.filter((source): source is Source => source !== null);
-
-		this._lastFetch = Date.now();
-		this._loading = false;
 	}
 
 	private channelToSource(
@@ -85,6 +87,10 @@ export class ManijaSources {
 		return this._lastFetch;
 	}
 
+	get error(): string | null {
+		return this._error;
+	}
+
 	toggleSourcePin(id: string): void {
 		if (!id || !this._sources?.length) return;
 
@@ -107,5 +113,6 @@ export class ManijaSources {
 	reset(): void {
 		this._sources = [];
 		this._lastFetch = 0;
+		this._error = null;
 	}
 }

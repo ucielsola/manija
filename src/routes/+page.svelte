@@ -7,9 +7,10 @@
 	import SourceList from '$lib/components/ui/SourceList.svelte';
 	import VideoGrid from '$lib/components/ui/VideoGrid.svelte';
 	import AddSourceDialog from '$lib/components/ui/AddSourceDialog.svelte';
-	import { Search, X } from 'lucide-svelte';
+	import { AlertCircle, Clock3, Radio, RefreshCw, Search, X } from 'lucide-svelte';
 
 	let expandedSection = $state<'noticias' | 'mis-videos' | null>('noticias');
+	let mobileMenuOpen = $state(false);
 
 	let apiSources = $derived.by(() => manijaSources.sources);
 	let gridSources = $derived.by(() => [...manijaSources.pinned, ...userSources.sources]);
@@ -28,15 +29,26 @@
 	function handleKeydown(e: KeyboardEvent) {
 		if (e.key === 'Escape') {
 			app.showAddSource = false;
+			mobileMenuOpen = false;
 		}
 	}
 
 	function toggleApiPin(sourceId: string) {
 		manijaSources.toggleSourcePin(sourceId);
+		mobileMenuOpen = false;
 	}
 
 	function toggleLibraryPin(sourceId: string) {
 		userSources.toggleSourcePin(sourceId);
+		mobileMenuOpen = false;
+	}
+
+	function formatLastUpdate() {
+		if (!manijaSources.lastFetch) return 'Todavía sin actualizar';
+		return new Intl.DateTimeFormat('es-AR', {
+			hour: '2-digit',
+			minute: '2-digit'
+		}).format(manijaSources.lastFetch);
 	}
 
 	function isApiSourcePinned(sourceId: string): boolean {
@@ -83,11 +95,20 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="bg-surface h-screen w-screen overflow-hidden">
-	<TopBar />
+<div class="bg-surface h-dvh w-screen overflow-hidden">
+	<TopBar
+		menuOpen={mobileMenuOpen}
+		activeStreams={apiSources.length}
+		onMenuToggle={() => (mobileMenuOpen = !mobileMenuOpen)}
+	/>
 
-	<div class="flex h-screen pt-14">
-		<Sidebar activeStreams={playingCount} onMuteAll={handleMuteAll}>
+	<div class="flex h-dvh pt-14">
+		<Sidebar
+			activeStreams={playingCount}
+			onMuteAll={handleMuteAll}
+			open={mobileMenuOpen}
+			onClose={() => (mobileMenuOpen = false)}
+		>
 			<div>
 				<div class="mb-2 flex items-center justify-between px-3">
 					<span class="text-[10px] font-bold tracking-widest text-neutral-500 uppercase">
@@ -162,8 +183,109 @@
 			</div>
 		</Sidebar>
 
-		<main class="bg-surface-dim ml-64 flex-1 overflow-y-auto p-4">
-			<VideoGrid sources={gridSources} loading={gridLoading} onClose={(id) => deleteSource(id)} />
+		<main class="bg-surface-dim min-w-0 flex-1 overflow-y-auto lg:ml-64">
+			<div class="mx-auto w-full max-w-[1800px] space-y-5 p-4 sm:space-y-7 sm:p-6 lg:p-8">
+				<section
+					class="relative overflow-hidden rounded-2xl border border-white/5 bg-[radial-gradient(ellipse_at_top_right,_rgba(126,81,255,0.16),_transparent_48%),linear-gradient(135deg,_#17151e,_#121212_62%)] p-5 sm:p-7"
+				>
+					<div
+						class="bg-primary/5 pointer-events-none absolute -right-16 -bottom-28 size-72 rounded-full blur-3xl"
+					></div>
+					<div class="relative flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+						<div class="max-w-2xl">
+							<div
+								class="text-primary mb-3 flex items-center gap-2 text-[10px] font-bold tracking-[0.22em] uppercase"
+							>
+								<Radio size={14} /> Centro de monitoreo
+							</div>
+							<h1
+								class="font-headline text-2xl font-extrabold tracking-tight text-white sm:text-3xl"
+							>
+								Tu señal en vivo
+							</h1>
+							<p class="mt-2 max-w-xl text-sm leading-6 text-neutral-400">
+								Seguí las transmisiones activas y armá tu propia grilla con tus canales favoritos.
+							</p>
+						</div>
+						<div class="flex flex-wrap items-center gap-2">
+							<div
+								class="border-secondary/20 bg-secondary/5 flex items-center gap-2 rounded-xl border px-3.5 py-2.5"
+							>
+								<span
+									class="bg-secondary size-2 rounded-full {apiSources.length > 0
+										? 'animate-pulse'
+										: 'opacity-40'}"
+								></span>
+								<span class="text-secondary text-xs font-bold">{apiSources.length} en vivo</span>
+							</div>
+							<div
+								class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5"
+							>
+								<span class="text-sm font-bold text-white">{gridSources.length}</span>
+								<span class="text-xs text-neutral-400">en tu grilla</span>
+							</div>
+						</div>
+					</div>
+					<div
+						class="relative mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-white/8 pt-4"
+					>
+						<div class="flex items-center gap-2 text-xs text-neutral-500">
+							<Clock3 size={14} />
+							<span>Última actualización: {formatLastUpdate()}</span>
+						</div>
+						<button
+							onclick={() => manijaSources.fetchSources()}
+							disabled={manijaSources.loading}
+							class="text-on-surface-variant hover:text-primary inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition-colors hover:bg-white/5 disabled:opacity-50"
+						>
+							<RefreshCw size={14} class={manijaSources.loading ? 'animate-spin' : ''} />
+							Actualizar canales
+						</button>
+					</div>
+				</section>
+
+				{#if manijaSources.error}
+					<div
+						class="border-error/20 bg-error/5 flex flex-col gap-3 rounded-xl border px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+					>
+						<div class="text-error flex items-center gap-2 text-sm">
+							<AlertCircle size={16} />
+							<span>{manijaSources.error}</span>
+						</div>
+						<button
+							onclick={() => manijaSources.fetchSources()}
+							class="text-error hover:bg-error/10 rounded-lg px-3 py-2 text-xs font-bold transition-colors"
+							>Reintentar</button
+						>
+					</div>
+				{/if}
+
+				<div class="flex items-center justify-between gap-3">
+					<div>
+						<h2 class="font-headline text-base font-bold text-white sm:text-lg">Reproduciendo</h2>
+						<p class="mt-1 text-xs text-neutral-500">
+							Canales fijados y videos agregados a tu grilla
+						</p>
+					</div>
+					{#if playingCount > 0}
+						<span
+							class="text-secondary bg-secondary/5 border-secondary/15 rounded-full border px-3 py-1 text-[10px] font-bold tracking-widest uppercase"
+							>{playingCount} activos</span
+						>
+					{/if}
+				</div>
+
+				<VideoGrid
+					sources={gridSources}
+					loading={gridLoading}
+					liveSourcesAvailable={apiSources.length}
+					onBrowseChannels={() => {
+						expandedSection = 'noticias';
+						mobileMenuOpen = true;
+					}}
+					onClose={(id) => deleteSource(id)}
+				/>
+			</div>
 		</main>
 	</div>
 </div>

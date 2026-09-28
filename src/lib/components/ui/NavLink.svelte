@@ -26,6 +26,6 @@
 		? 'bg-primary/10 text-primary border-primary border-r-2'
 		: 'text-neutral-500 hover:bg-white/5 hover:text-neutral-200'} group transition-colors"
 >
-	<svelte:component this={Icon} size={16} class={active ? 'fill-primary' : ''} />
+	<Icon size={16} class={active ? 'fill-primary' : ''} />
 	<span class="font-body text-xs font-medium tracking-widest uppercase">{label}</span>
 </a>
