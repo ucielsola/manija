@@ -30,7 +30,9 @@
 		manijaSources.channels.filter((channel) => channel.status === 'offline')
 	);
 	let gridSources = $derived.by(() => [...manijaSources.pinned, ...userSources.sources]);
-	let gridLoading = $derived.by(() => manijaSources.loading && userSources.sources.length === 0);
+	let gridLoading = $derived.by(
+		() => manijaSources.loading && manijaSources.lastFetch === 0 && userSources.sources.length === 0
+	);
 	let playingCount = $derived.by(
 		() => gridSources.filter((s: { playing?: boolean }) => s.playing).length
 	);
