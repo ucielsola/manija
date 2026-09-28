@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { app, userSources, manijaSources, librarySearch } from '$lib/stores';
 	import TopBar from '$lib/components/ui/TopBar.svelte';
 	import Sidebar from '$lib/components/ui/Sidebar.svelte';
@@ -7,17 +8,52 @@
 	import SourceList from '$lib/components/ui/SourceList.svelte';
 	import VideoGrid from '$lib/components/ui/VideoGrid.svelte';
 	import AddSourceDialog from '$lib/components/ui/AddSourceDialog.svelte';
-	import { AlertCircle, Clock3, Radio, RefreshCw, Search, X } from 'lucide-svelte';
+	import {
+		AlertCircle,
+		ChevronDown,
+		ChevronUp,
+		Clock3,
+		ExternalLink,
+		Radio,
+		RefreshCw,
+		Search,
+		X
+	} from 'lucide-svelte';
+	import type { Channel } from '$lib/types/streams';
 
 	let expandedSection = $state<'noticias' | 'mis-videos' | null>('noticias');
 	let mobileMenuOpen = $state(false);
+	let showOfflineChannels = $state(false);
 
 	let apiSources = $derived.by(() => manijaSources.sources);
+	let offlineChannels = $derived.by(() =>
+		manijaSources.channels.filter((channel) => channel.status === 'offline')
+	);
 	let gridSources = $derived.by(() => [...manijaSources.pinned, ...userSources.sources]);
 	let gridLoading = $derived.by(() => manijaSources.loading && userSources.sources.length === 0);
 	let playingCount = $derived.by(
 		() => gridSources.filter((s: { playing?: boolean }) => s.playing).length
 	);
+
+	onMount(() => {
+		const refreshIfStale = () => {
+			if (
+				document.visibilityState === 'visible' &&
+				!manijaSources.loading &&
+				Date.now() - manijaSources.lastFetch >= 5 * 60 * 1000
+			) {
+				void manijaSources.fetchSources();
+			}
+		};
+
+		const interval = window.setInterval(refreshIfStale, 5 * 60 * 1000);
+		document.addEventListener('visibilitychange', refreshIfStale);
+
+		return () => {
+			window.clearInterval(interval);
+			document.removeEventListener('visibilitychange', refreshIfStale);
+		};
+	});
 
 	function toggleSection(section: 'noticias' | 'mis-videos') {
 		expandedSection = expandedSection === section ? null : section;
@@ -49,6 +85,18 @@
 			hour: '2-digit',
 			minute: '2-digit'
 		}).format(manijaSources.lastFetch);
+	}
+
+	function formatChannelUpdate(channel: Channel) {
+		if (!channel.updated_at) return 'Sin chequeos todavía';
+		return new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit' }).format(
+			new Date(channel.updated_at * 1000)
+		);
+	}
+
+	function getChannelUrl(channel: Channel) {
+		const handle = channel.handle.startsWith('@') ? channel.handle : `@${channel.handle}`;
+		return `https://www.youtube.com/${handle}`;
 	}
 
 	function browseLiveChannels() {
@@ -301,6 +349,67 @@
 					onBrowseChannels={browseLiveChannels}
 					onClose={(id) => deleteSource(id)}
 				/>
+
+				{#if offlineChannels.length > 0}
+					<section
+						class="bg-surface-container-low overflow-hidden rounded-2xl border border-white/8"
+					>
+						<button
+							class="flex w-full items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-white/3 sm:px-5"
+							aria-expanded={showOfflineChannels}
+							aria-controls="offline-channel-list"
+							onclick={() => (showOfflineChannels = !showOfflineChannels)}
+						>
+							<span
+								class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/5 text-neutral-400"
+							>
+								<Radio size={16} />
+							</span>
+							<span class="min-w-0 flex-1">
+								<span class="block text-sm font-semibold text-white">Sin transmisión</span>
+								<span class="mt-0.5 block text-xs text-neutral-500"
+									>Canales monitoreados que están offline</span
+								>
+							</span>
+							<span
+								class="rounded-full bg-white/5 px-2.5 py-1 text-xs font-semibold text-neutral-400"
+								>{offlineChannels.length}</span
+							>
+							{#if showOfflineChannels}
+								<ChevronUp size={16} class="shrink-0 text-neutral-500" />
+							{:else}
+								<ChevronDown size={16} class="shrink-0 text-neutral-500" />
+							{/if}
+						</button>
+
+						{#if showOfflineChannels}
+							<ul
+								id="offline-channel-list"
+								class="divide-y divide-white/5 border-t border-white/5 px-4 sm:px-5"
+							>
+								{#each offlineChannels as channel (channel.id)}
+									<li class="flex items-center justify-between gap-4 py-3">
+										<div class="flex min-w-0 items-center gap-3">
+											<span class="size-1.5 shrink-0 rounded-full bg-neutral-600"></span>
+											<span class="truncate text-sm text-neutral-300">{channel.handle}</span>
+										</div>
+										<div class="flex shrink-0 items-center gap-3 text-xs text-neutral-500">
+											<span class="hidden sm:inline">Chequeado {formatChannelUpdate(channel)}</span>
+											<a
+												href={getChannelUrl(channel)}
+												target="_blank"
+												rel="noreferrer"
+												class="hover:text-primary inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 transition-colors hover:bg-white/5"
+											>
+												Ver canal <ExternalLink size={13} />
+											</a>
+										</div>
+									</li>
+								{/each}
+							</ul>
+						{/if}
+					</section>
+				{/if}
 			</div>
 		</main>
 	</div>

@@ -7,6 +7,7 @@ import type { Channel } from '$lib/types/streams';
 export class ManijaSources {
 	private _storage?: AppStorage;
 	private _sources = $state<Source[]>([]);
+	private _channels = $state<Channel[]>([]);
 	private _pinned = $derived<Source[]>(this._sources.filter((source) => source.pinned));
 	private _muted = $derived<Source[]>(this._sources.filter((source) => source.muted));
 	private _allMuted = $derived<boolean>(this._muted.length === this._sources.length);
@@ -37,6 +38,7 @@ export class ManijaSources {
 			const pinnedData =
 				this._storage.get<{ id: string; pinned: boolean }[]>('manijaSourcesPinned') ?? [];
 
+			this._channels = response.channels;
 			this._sources = response.channels
 				.map((channel) => this.channelToSource(channel, pinnedData))
 				.filter((source): source is Source => source !== null);
@@ -69,6 +71,10 @@ export class ManijaSources {
 
 	get sources(): Source[] {
 		return this._sources.toReversed();
+	}
+
+	get channels(): Channel[] {
+		return this._channels;
 	}
 
 	get pinned(): Source[] {
@@ -112,6 +118,7 @@ export class ManijaSources {
 
 	reset(): void {
 		this._sources = [];
+		this._channels = [];
 		this._lastFetch = 0;
 		this._error = null;
 	}
