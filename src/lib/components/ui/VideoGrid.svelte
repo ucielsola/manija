@@ -3,7 +3,7 @@
 	import VideoPlayer from '$lib/components/ui/VideoPlayer.svelte';
 	import VideoPlayerSkeleton from '$lib/components/ui/VideoPlayerSkeleton.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import { ArrowRight, PlayCircle, Radio, Video } from 'lucide-svelte';
+	import { ArrowRight, PlayCircle, Radio } from 'lucide-svelte';
 	import { app } from '$lib/stores';
 
 	let {
@@ -59,7 +59,7 @@
 			{#if onBrowseChannels}
 				<button
 					onclick={onBrowseChannels}
-					class="text-primary hover:bg-primary/10 mt-5 inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-xs font-bold transition-colors"
+					class="border-outline-variant/30 text-on-surface-variant hover:border-primary/40 hover:text-primary mt-5 inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-xs font-bold transition-colors"
 				>
 					Ver canales en vivo <ArrowRight size={15} />
 				</button>
@@ -72,8 +72,7 @@
 			</p>
 		{/if}
 		<div class="mt-5">
-			<Button variant="secondary" onclick={() => (app.showAddSource = true)}>
-				<Video size={14} />
+			<Button variant="primary" onclick={() => (app.showAddSource = true)}>
 				Agregar video propio
 			</Button>
 		</div>

@@ -348,10 +348,10 @@
 			if (event.target === event.currentTarget && !busy) channelToDelete = null;
 		}}
 	>
-		<dialog
-			open
+		<div
 			class="border-outline-variant/30 bg-surface-container w-full max-w-md rounded-2xl border p-6 shadow-2xl"
 			role="alertdialog"
+			tabindex="-1"
 			aria-modal="true"
 			aria-labelledby="remove-channel-title"
 			aria-describedby="remove-channel-description"
@@ -369,7 +369,9 @@
 					<X size={18} />
 				</button>
 			</div>
-			<h2 id="remove-channel-title" class="font-headline text-xl font-bold">Quitar canal</h2>
+			<h2 id="remove-channel-title" class="font-headline text-on-surface text-xl font-bold">
+				Quitar canal
+			</h2>
 			<p id="remove-channel-description" class="text-on-surface-variant mt-2 text-sm leading-6">
 				¿Dejar de monitorear <strong class="text-on-surface">{channelToDelete.handle}</strong>? No
 				va a reaparecer al reiniciar el servicio. Podés volver a agregarlo más adelante.
@@ -391,7 +393,7 @@
 					Quitar canal
 				</button>
 			</div>
-		</dialog>
+		</div>
 	</div>
 {/if}
 

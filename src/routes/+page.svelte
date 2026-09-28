@@ -51,6 +51,23 @@
 		}).format(manijaSources.lastFetch);
 	}
 
+	function browseLiveChannels() {
+		expandedSection = 'noticias';
+		librarySearch.clearSearch();
+
+		const shouldOpenDrawer = window.matchMedia('(max-width: 1023px)').matches;
+		if (shouldOpenDrawer) mobileMenuOpen = true;
+
+		setTimeout(
+			() => {
+				const section = document.getElementById('live-channels');
+				section?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+				section?.querySelector('button')?.focus({ preventScroll: true });
+			},
+			shouldOpenDrawer ? 250 : 0
+		);
+	}
+
 	function isApiSourcePinned(sourceId: string): boolean {
 		return manijaSources.pinned.some((s) => s.id === sourceId);
 	}
@@ -138,20 +155,22 @@
 
 				{#if !librarySearch.hasSearch}
 					<div class="space-y-1">
-						<AccordionSection
-							title="Noticias Argentina"
-							expanded={expandedSection === 'noticias'}
-							onToggle={() => toggleSection('noticias')}
-						>
-							<SourceList
-								sources={apiSources}
-								loading={manijaSources.loading}
-								emptyMessage="No hay canales disponibles"
-								onPinToggle={toggleApiPin}
-								isPinned={isApiSourcePinned}
-								showPinButton
-							/>
-						</AccordionSection>
+						<div id="live-channels" class="scroll-mt-4">
+							<AccordionSection
+								title="Noticias Argentina"
+								expanded={expandedSection === 'noticias'}
+								onToggle={() => toggleSection('noticias')}
+							>
+								<SourceList
+									sources={apiSources}
+									loading={manijaSources.loading}
+									emptyMessage="No hay canales disponibles"
+									onPinToggle={toggleApiPin}
+									isPinned={isApiSourcePinned}
+									showPinButton
+								/>
+							</AccordionSection>
+						</div>
 
 						<AccordionSection
 							title="Mis Videos"
@@ -279,10 +298,7 @@
 					sources={gridSources}
 					loading={gridLoading}
 					liveSourcesAvailable={apiSources.length}
-					onBrowseChannels={() => {
-						expandedSection = 'noticias';
-						mobileMenuOpen = true;
-					}}
+					onBrowseChannels={browseLiveChannels}
 					onClose={(id) => deleteSource(id)}
 				/>
 			</div>

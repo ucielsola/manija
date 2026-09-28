@@ -9,7 +9,6 @@
 		loading,
 		emptyMessage,
 		onPinToggle,
-		onAdd,
 		showPinButton = true,
 		isPinned,
 		children
@@ -18,7 +17,6 @@
 		loading: boolean;
 		emptyMessage: string;
 		onPinToggle: (id: string) => void;
-		onAdd?: (source: Source) => void;
 		showPinButton?: boolean;
 		isPinned?: (id: string) => boolean;
 		children?: Snippet;
@@ -45,7 +43,6 @@
 				{source}
 				isPinned={isPinned ? () => isPinned(source.id) : source.pinned}
 				{onPinToggle}
-				{onAdd}
 				{showPinButton}
 			/>
 		{/each}
