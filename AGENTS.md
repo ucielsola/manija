@@ -28,6 +28,8 @@ pnpm format        # Format with Prettier
 
 **Services:** `src/lib/services/` - API integrations (`streamsService.ts`)
 
+**Admin panel:** `/admin` manages monitored YouTube channels. Set `MANIJA_ADMIN_PASSWORD` as a private deployment environment variable; the API key remains server-side.
+
 **Components:** `src/lib/components/` - UI components with icon subdirectory
 
 **Stores:** Exposed from `src/lib/stores/index.ts` - `app`, `userSources`, `manijaSources`, `toastStore`
