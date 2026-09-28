@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Menu, Radio, Settings2, Tv, X } from 'lucide-svelte';
+	import { Menu, MessageSquarePlus, Radio, Tv, X } from 'lucide-svelte';
 
 	let {
 		onMenuToggle,
@@ -37,12 +37,12 @@
 			</div>
 		{/if}
 		<a
-			href="/admin"
+			href="/sugerir"
 			class="text-on-surface-variant hover:text-primary flex size-9 items-center justify-center rounded-lg transition-colors hover:bg-white/5 sm:w-auto sm:gap-2 sm:px-3"
-			aria-label="Administrar canales"
+			aria-label="Sugerir un canal"
 		>
-			<Settings2 size={17} />
-			<span class="hidden text-xs font-semibold sm:inline">Administrar canales</span>
+			<MessageSquarePlus size={17} />
+			<span class="hidden text-xs font-semibold sm:inline">Sugerir un canal</span>
 		</a>
 	</div>
 </header>
